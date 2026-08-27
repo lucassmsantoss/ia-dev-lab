@@ -53,8 +53,18 @@ das quatro eliminou exatamente uma classe de falha. O exemplo de padrão mudou a
 (assinatura, tipagem, função auxiliar isolada), o que ajuda na manutenção, mas sozinho não
 teria corrigido nenhum dos seis casos. E a **forma de validar** foi o que mudou a natureza da
 conclusão: ao pedir os testes junto com a implementação, a qualidade deixou de ser opinião e
-virou número verificável. Detalhe completo em
-[`prompts-comparacao.md`](prompts-comparacao.md).
+virou número verificável.
+
+Ao repetir o prompt fraco em outra ferramenta (GitHub Copilot), já com o repositório contendo o
+`CLAUDE.md`, apareceu o resultado mais interessante do trabalho: o agente **não** gerou código
+ingênuo — leu a implementação existente, rodou os testes e reportou `38 passed`. O mesmo prompt
+vago que antes acertava 4 de 10 passou a se comportar corretamente, porque as decisões que
+antes ele precisava adivinhar já estavam escritas no repositório. **Contexto versionado eleva o
+piso do prompt fraco:** um `CLAUDE.md` bem feito funciona como um prompt permanente, que paga o
+custo de escrita uma vez e desconta em todos os pedidos seguintes. A comparação não é
+controlada — mudaram a ferramenta e a presença do contexto ao mesmo tempo — e essa limitação
+está registrada em [`prompts-comparacao.md`](prompts-comparacao.md), junto com o detalhamento
+completo do experimento.
 
 ## 4. Obstáculo enfrentado e como resolvi
 
@@ -90,7 +100,7 @@ sujar o ambiente da máquina.
 - [x] Arquivo `docs/prompts-comparacao.md` com o comparativo de prompts
 - [x] Pull Request aberto no GitHub (#1, sem merge)
 - [x] Arquivo `.mcp.json` — servidor de filesystem configurado e testado
-- [x] Relatório final em Markdown
+- [x] Relatório final em Markdown e PDF
 
 **Evidência de execução:** `python -m pytest -q` → `38 passed in 0.09s`
 (Anaconda, Python 3.9.12, pytest 7.1.1).

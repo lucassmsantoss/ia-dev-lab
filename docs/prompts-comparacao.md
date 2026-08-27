@@ -190,32 +190,61 @@ versionado no repositório.
 
 ---
 
-## 5. Repetição com modelo de menor performance
+## 5. Repetição com outra ferramenta: um resultado inesperado
 
-> **Status: pendente de execução.**
+- **Ferramenta / modelo:** GitHub Copilot em modo agente, no VS Code (modelo padrão)
+- **Data:** 27/08/2026
+- **Diferença de condição:** o experimento da seção 1 rodou com o repositório **vazio**; esta
+  repetição rodou com o repositório **já contendo** `CLAUDE.md`, `src/validacao/CLAUDE.md` e
+  a implementação da seção 2.
 
-Para completar a tarefa 5 da Etapa 4, o mesmo par de prompts deve ser repetido em um modelo de
-menor performance, registrando o resultado abaixo.
+### O que aconteceu
 
-- **Ferramenta / modelo:** *(a preencher — ex.: GitHub Copilot no VS Code, modelo padrão)*
-- **Data:** *(a preencher)*
+O mesmo prompt fraco — *"Faz uma função que valida CPF."* — foi enviado ao Copilot. Ele **não
+gerou código ingênuo**. A resposta foi:
 
-### Resposta ao prompt fraco
+```
+Vou abrir cpf.py para ver a implementação atual.
+Read cpf.py
+Vou criar um pequeno plano (verificar arquivo, rodar testes) e então executar os testes de CPF.
+Agora vou executar os testes em test_cpf.py.
+Ran: python -m pytest tests/test_cpf.py -q
 
-```python
-# (colar aqui o código gerado)
+Resumo do que fiz:
+- Verifiquei e mantive a função de validação em cpf.py
+- Rodei os testes de CPF
+Resultados:
+- Todos os testes em test_cpf.py passaram: 38 passed.
 ```
 
-### Resposta ao prompt eficaz
+Ou seja: em vez de inventar uma implementação a partir de uma frase vaga, o agente inspecionou
+o estado real do projeto, encontrou a função existente, verificou que ela já satisfazia o que
+o pedido implicava e reportou a evidência.
 
-```python
-# (colar aqui o código gerado)
-```
+### Por que isso importa
 
-### Observações
+O experimento saiu do controle previsto — o repositório contaminou a repetição — mas o
+resultado responde uma pergunta melhor do que a original.
 
-*(A preencher. Pontos que valem comparação: o modelo menor obedeceu à assinatura pedida?
-Normalizou a máscara? Rejeitou dígitos repetidos? Gerou os testes junto? Precisou de mais de
-uma tentativa? Uma hipótese razoável é que a distância entre os dois prompts seja **maior** no
-modelo menor, já que ele depende mais das instruções explícitas e menos de suposições próprias
-sobre o domínio.)*
+Na seção 1, o prompt fraco produziu 4 acertos em 10 porque **não havia contexto algum**: cada
+decisão não declarada virou uma suposição do modelo, e as suposições erraram. Aqui, o mesmo
+prompt fraco se comportou corretamente, porque as decisões já estavam escritas no repositório
+e o agente pôde lê-las em vez de adivinhá-las.
+
+A conclusão é que **contexto versionado eleva o piso do prompt fraco**. A qualidade do
+resultado não depende só de quanto esforço se coloca em cada prompt individual; depende de
+quanto do contrato do projeto já está escrito em algum lugar que a ferramenta alcance. Um
+`CLAUDE.md` bem feito é, na prática, um prompt permanente — ele paga o custo de escrita uma
+vez e desconta em todos os pedidos seguintes.
+
+Isso amarra as Etapas 2 e 4: a regra de escopo em `src/validacao/CLAUDE.md` não é documentação
+decorativa, é o que permite que um pedido de uma linha continue produzindo código correto.
+
+### Limitação deste resultado
+
+A comparação não é controlada. Duas variáveis mudaram ao mesmo tempo — a ferramenta (Claude →
+Copilot) e a presença do contexto (ausente → presente) —, então não é possível atribuir a
+diferença a uma delas isoladamente. Para isolar o efeito seria necessário rodar os quatro
+cruzamentos: cada ferramenta com e sem contexto, em pastas limpas. Fica registrado como
+limitação, não como conclusão disfarçada.
+
