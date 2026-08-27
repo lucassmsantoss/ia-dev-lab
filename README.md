@@ -19,19 +19,26 @@ comparar de forma objetiva o código gerado a partir de um prompt fraco e de um 
 
 ```
 ia-dev-lab/
-|-- CLAUDE.md                 # contexto do projeto para o agente de IA
+|-- CLAUDE.md                  # contexto do projeto para o agente de IA
 |-- README.md
+|-- .mcp.json                  # servidores MCP do projeto (Etapa 5)
+|-- .gitignore
 |-- requirements.txt
-|-- hello.py                  # script de verificação do ambiente (Etapa 1)
+|-- hello.py                   # script de verificação do ambiente (Etapa 1)
 |-- docs/
 |   |-- adr/
 |   |   `-- 0001-escolha-da-ferramenta-de-ia.md
-|   `-- prompts-comparacao.md # prompt fraco vs. prompt eficaz (Etapa 4)
+|   |-- prompts-comparacao.md  # prompt fraco vs. prompt eficaz (Etapa 4)
+|   |-- mcp-configuracao.md    # passo a passo e obstáculos do MCP (Etapa 5)
+|   |-- relatorio-final.md     # relatório da atividade (Etapa 6)
+|   `-- relatorio-final.pdf
 |-- src/
-|   `-- validacao/            # domínio: validação de documentos
-|       |-- CLAUDE.md         # regra customizada com escopo nesta pasta
+|   `-- validacao/             # domínio: validação de documentos
+|       |-- CLAUDE.md          # regra customizada com escopo nesta pasta
+|       |-- __init__.py
 |       `-- cpf.py
 `-- tests/
+    |-- __init__.py
     `-- test_cpf.py
 ```
 
