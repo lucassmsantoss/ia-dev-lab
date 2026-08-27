@@ -38,22 +38,26 @@ todo prompt.
 
 ## 3. Diferença entre o prompt fraco e o prompt eficaz
 
-Executei os dois prompts para a mesma funcionalidade e rodei as duas versões geradas contra os
-mesmos dez casos: o prompt fraco acertou **4 de 10**, o eficaz acertou **10 de 10**.
+A diferença entre os dois prompts não foi a quantidade de código pedida, e sim o quanto ficou
+declarado — no prompt eficaz eu entreguei o porquê da tarefa, o contexto do projeto e as regras
+que a validação precisa respeitar. Rodei as duas versões geradas contra os mesmos dez casos: o
+prompt fraco acertou **4 de 10**, o eficaz acertou **10 de 10**, embora o cálculo dos dígitos
+verificadores estivesse correto nas duas versões. O modelo já tinha o conhecimento do domínio;
+faltava o contrato.
 
-A diferença mais importante é que **o prompt fraco não errou a matemática**. O cálculo dos
-dígitos verificadores está correto nas duas versões. Os seis casos perdidos vêm inteiramente
-de suposições que o modelo teve de inventar porque o prompt não as fixou: CPF com máscara
-rejeitado (falso negativo), `"11111111111"` aceito como válido (falso positivo) e exceções não
-tratadas para `None` e para texto com letras. O modelo não falhou em conhecimento de domínio;
-faltou-lhe o contrato.
+As seis falhas do prompt fraco foram todas suposições que o modelo teve que fazer sozinho
+porque nada as fixou: supôs que a entrada viria sem máscara (falso negativo em CPF com
+pontuação), que `"11111111111"` era válido (falso positivo, o pior defeito possível em um
+validador) e que lançar exceção em entrada nula era aceitável. Ou seja, o prompt eficaz não fez
+o modelo interpretar mais — fez ele interpretar **menos**, porque cada restrição substituiu uma
+adivinhação por uma regra.
 
-Dos quatro elementos do prompt eficaz, quem produziu o resultado foi a **restrição** — cada uma
-das quatro eliminou exatamente uma classe de falha. O exemplo de padrão mudou a forma do código
+Foi por isso que a **restrição** rendeu mais que os outros elementos: cada uma das quatro
+eliminou exatamente uma classe de falha. O exemplo de padrão mudou a forma do código
 (assinatura, tipagem, função auxiliar isolada), o que ajuda na manutenção, mas sozinho não
-teria corrigido nenhum dos seis casos. E a **forma de validar** foi o que mudou a natureza da
-conclusão: ao pedir os testes junto com a implementação, a qualidade deixou de ser opinião e
-virou número verificável.
+teria corrigido nenhum dos seis casos. E a **forma de validar** mudou a natureza da conclusão:
+ao pedir os testes junto com a implementação, a qualidade deixou de ser opinião e virou número
+verificável.
 
 Ao repetir o prompt fraco em outra ferramenta (GitHub Copilot), já com o repositório contendo o
 `CLAUDE.md`, apareceu o resultado mais interessante do trabalho: o agente **não** gerou código

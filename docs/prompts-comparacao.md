@@ -163,6 +163,19 @@ Os mesmos dez casos foram executados contra as duas versões:
 
 ## 4. Análise das diferenças
 
+**Síntese em quatro frases.** A diferença entre os dois prompts não foi a quantidade de código
+pedida, e sim o quanto ficou declarado — no prompt eficaz eu entreguei o porquê da tarefa, o
+contexto do projeto e as regras que a validação precisa respeitar. O resultado é que o prompt
+fraco acertou 4 dos 10 casos e o eficaz acertou 10, embora o cálculo dos dígitos verificadores
+estivesse correto nas duas versões: o modelo já tinha o conhecimento do domínio, faltava o
+contrato. As seis falhas do prompt fraco foram todas suposições que o modelo teve que fazer
+sozinho porque nada as fixou — supôs que a entrada viria sem máscara, que `"11111111111"` era
+válido e que lançar exceção em entrada nula era aceitável. Ou seja, o prompt eficaz não fez o
+modelo interpretar mais: fez ele interpretar menos, porque cada restrição substituiu uma
+adivinhação por uma regra.
+
+### Detalhamento
+
 O prompt fraco não gerou código *errado*, gerou código com o **contrato errado**: a matemática
 dos dígitos verificadores está correta nas duas versões, e toda a diferença de 6 casos vem de
 suposições que o modelo teve de inventar porque o prompt não as fixou.
