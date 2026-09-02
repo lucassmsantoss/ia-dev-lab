@@ -1,0 +1,33 @@
+schema: spec-driven
+
+context: |
+  Projeto: ia-dev-lab — laboratório de desenvolvimento assistido por IA da disciplina
+  Tópicos Avançados em Engenharia de Software 2 (PPgTI / IMD-UFRN).
+
+  Stack: Python 3.9.12 (Anaconda, Windows), pytest 7.1.1. Sem dependências de terceiros
+  em código de produção — apenas biblioteca padrão.
+
+  Domínio: validação de documentos brasileiros. O código é organizado por domínio
+  (src/validacao/), nunca por tipo técnico. Cada módulo em src/ tem teste espelhado em tests/.
+
+  Convenções obrigatórias estão em CLAUDE.md (raiz) e em src/validacao/CLAUDE.md (regra com
+  escopo na pasta de validação). Leia os dois antes de propor qualquer artefato.
+
+  Regra central do domínio: validadores são funções puras com assinatura
+  validar_<documento>(valor: str) -> bool. Normalizam a entrada antes de validar, nunca
+  levantam exceção, e tratam entrada malformada como resultado False.
+
+rules:
+  proposal:
+    - Escreva a user story em linguagem de comportamento, sem citar nomes de função,
+      assinaturas, bibliotecas ou estrutura de arquivos.
+    - Inclua sempre uma seção de não-objetivos.
+  spec:
+    - Todo requisito precisa de pelo menos um cenário Given/When/Then.
+    - Inclua ao menos um cenário de caso de borda que não seja óbvio a partir do requisito.
+    - Cenários devem usar valores concretos e verificáveis, nunca "um documento válido".
+  tasks:
+    - Cada tarefa deve ser verificável por um teste ou por um comando executável.
+    - Tarefas de teste não ficam no fim do plano: acompanham a tarefa que implementam.
+  design:
+    - Registre as alternativas descartadas e o motivo, não apenas a decisão tomada.
