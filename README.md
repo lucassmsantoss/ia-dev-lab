@@ -53,12 +53,18 @@ ia-dev-lab/
 |       |-- CLAUDE.md          # regra customizada com escopo nesta pasta
 |       |-- __init__.py
 |       |-- cpf.py
-|       `-- cnpj.py
+|       |-- cnpj.py
+|       `-- lote.py          # validação em lote a partir de CSV
 `-- tests/
     |-- __init__.py
     |-- test_cpf.py
-    `-- test_cnpj.py
+    |-- test_cnpj.py
+    `-- test_lote.py
 ```
+
+Em `docs/` também vivem os artefatos da atividade de Spec-Driven Development:
+[`escopo.md`](docs/escopo.md), [`spec-lote-csv.md`](docs/spec-lote-csv.md) e
+[`comparacao-abordagens-sdd.md`](docs/comparacao-abordagens-sdd.md).
 
 As pastas são organizadas por **domínio** (`validacao`), não por tipo técnico. Não existe
 `utils/` nem `helpers/`: quando surgir a validação de CNPJ, ela entra em `src/validacao/`
@@ -110,7 +116,13 @@ pip install -r requirements.txt
 | `python -m pytest --cov=src` | Roda os testes com relatório de cobertura |
 | `python -m src.validacao.cpf 529.982.247-25` | Valida um CPF pela linha de comando |
 | `python -m src.validacao.cnpj 12.ABC.345/01DE-35` | Valida um CNPJ pela linha de comando |
+| `python -m src.validacao.lote base.csv documento` | Valida em lote os documentos de um CSV |
 | `openspec list` | Lista as mudanças especificadas com OpenSpec |
+
+A validação em lote infere o tipo de cada documento pelo comprimento, lê arquivos salvos pelo
+Excel (com BOM e separador `;`) e usa três códigos de saída: `0` quando todos são válidos,
+`1` quando há documentos inválidos e `2` quando não foi possível executar — o que permite
+encadeá-la em scripts sem confundir "a base tem erros" com "o processo quebrou".
 | `python hello.py` | Script de verificação inicial do ambiente |
 
 ## Documentação
