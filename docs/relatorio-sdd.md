@@ -7,8 +7,8 @@
 | **Aluno** | Lucas Santos |
 | **Disciplina** | Tópicos Avançados em Engenharia de Software 2 — PPgTI / IMD-UFRN |
 | **Repositório** | https://github.com/lucassmsantoss/ia-dev-lab |
-| **Pull Request** | https://github.com/lucassmsantoss/ia-dev-lab/pull/2 — aberto, sem merge |
-| **Data** | 02/09/2026 |
+| **Pull Requests** | [#2](https://github.com/lucassmsantoss/ia-dev-lab/pull/2) — trabalho da atividade, mesclado · [#3](https://github.com/lucassmsantoss/ia-dev-lab/pull/3) — correções de auditoria, **aberto** |
+| **Data** | 02/09/2026, revisado em 03/09/2026 |
 
 | 2 funcionalidades | 2 abordagens de spec | 116 testes | 3 defeitos encontrados |
 |:---:|:---:|:---:|:---:|
@@ -86,11 +86,20 @@ se pagasse foi a parte difícil de desaprender.
 - [x] `docs/escopo.md` com as funcionalidades escolhidas e a justificativa
 - [x] Especificação completa: requisitos, critérios de aceite com caso de borda próprio e plano de tarefas revisado — OpenSpec em `openspec/changes/add-validacao-cnpj/` e Markdown em `docs/spec-lote-csv.md`
 - [x] Registro das ferramentas e abordagens usadas, e por quê, em `docs/comparacao-abordagens-sdd.md`
-- [x] Repositório no GitHub com histórico de commits granular e Pull Request aberto
+- [x] Repositório no GitHub com histórico de commits granular e Pull Request aberto (#3)
 - [x] Relatório final de uma página cobrindo os três pontos do roteiro
 
 **Registros adicionais:** revisão do plano em `revisao-do-plano.md`, revisão dos diffs com três
 defeitos encontrados em `revisao-dos-diffs.md`, e o checkpoint humano em `checkpoint-humano.md`.
+
+**Sobre o PR #3.** Concluído o trabalho, submeti toda a documentação a uma auditoria que
+comparava cada afirmação escrita contra o estado real do código. Ela encontrou 18 divergências
+— entre elas, uma citação entre aspas de um arquivo que já havia sido reescrito e uma evidência
+de execução que citava um comando que hoje roda 116 testes, não 38. O ADR 0001 deste
+repositório já advertia que documentação desatualizada é pior que nenhuma; a auditoria mostrou
+que ela envelheceu em seis dias, num projeto de dois arquivos de código. Documentação
+versionada não fica correta sozinha: precisa de uma passagem de verificação própria, como o
+código tem os testes.
 
 **Evidência de execução:** `python -m pytest -q` → **116 passed**, em Anaconda com Python
 3.9.12 e pytest 7.1.1.
