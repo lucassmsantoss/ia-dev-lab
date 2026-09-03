@@ -26,7 +26,8 @@ crítica feita na revisão humana e as alterações aplicadas com justificativa.
 
 ## Crítica
 
-O plano é executável, mas tem cinco problemas. Três são de sequência e dois são de escopo.
+O plano é executável, mas tem seis problemas. Três são de sequência, dois são de escopo e
+um é de documentação.
 
 **Falta a tarefa que mais importa.** Não há nenhum passo para *conferir a regra contra a
 fonte*. O plano assume que a norma do CNPJ alfanumérico é conhecida e parte direto para a
@@ -76,7 +77,8 @@ O plano revisado está em [`tasks.md`](tasks.md).
 ## Observação
 
 Das nove tarefas propostas, duas foram removidas, três viraram uma, e três novas foram
-acrescentadas — o plano final tem pouco mais da metade dos itens originais e cobre mais coisa.
+acrescentadas. O plano final se reorganizou em cinco blocos com dependência explícita entre
+eles, contra nove tarefas soltas, e cobre mais coisa.
 Vale registrar que os dois itens fora de escopo (máscara e gerador) eram justamente os mais
 "úteis" à primeira vista. A proposta havia declarado ambos como não-objetivos de forma
 explícita, e ainda assim eles apareceram. É um argumento a favor de escrever a seção de

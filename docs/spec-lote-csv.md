@@ -4,8 +4,9 @@
 **Motivo da escolha:** ver [`comparacao-abordagens-sdd.md`](comparacao-abordagens-sdd.md).
 **Data:** 02/09/2026.
 
-Este documento cobre, em um único arquivo, o que o OpenSpec distribuiu em cinco: proposta,
-requisitos, critérios de aceite, decisões técnicas e plano de tarefas.
+Este documento cobre, em um único arquivo, o que o OpenSpec distribuiu em quatro artefatos —
+`proposal.md`, `specs/validacao-cnpj/spec.md`, `design.md` e `tasks.md` — mais três documentos
+de revisão.
 
 ---
 
@@ -114,15 +115,15 @@ Comprimentos fora desses dois viram falha com motivo `tamanho inesperado`.
 Atende ao R6 sem duplicar lógica: quem usa como biblioteca recebe o objeto; a interface de
 terminal formata o mesmo objeto.
 
-**D6 — Linha em branco é ausência de registro, não registro vazio.** Decorre do comportamento
-do módulo `csv`, e foi mantida em vez de contornada: reconstruir as linhas em branco exigiria
-abandonar o `DictReader` e reimplementar o parsing, para representar no relatório algo que o
-usuário não considera um dado.
-
 **D5 — Três códigos de saída: `0`, `1` e `2`.** Esta decisão passou pelo checkpoint humano.
 O plano inicial usava `1` tanto para "há documentos inválidos" quanto para "arquivo não
 encontrado", o que torna impossível a um script distinguir "a base tem erros, me avise" de
 "o processo quebrou, pare a esteira". Separar os dois é o que torna o comando encadeável.
+
+**D6 — Linha em branco é ausência de registro, não registro vazio.** Decorre do comportamento
+do módulo `csv`, e foi mantida em vez de contornada: reconstruir as linhas em branco exigiria
+abandonar o `DictReader` e reimplementar o parsing, para representar no relatório algo que o
+usuário não considera um dado.
 
 ## 5. Plano de tarefas
 

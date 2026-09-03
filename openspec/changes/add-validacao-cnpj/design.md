@@ -38,9 +38,10 @@ validação de conjunto de caracteres que ocorre **antes** da conversão.
 
 ## D3 — Pesos escritos explicitamente, não gerados por laço
 
-**Decisão:** declarar os pesos como listas literais no módulo:
-`[5,4,3,2,9,8,7,6,5,4,3,2]` para o primeiro dígito e `[6,5,4,3,2,9,8,7,6,5,4,3,2]` para o
-segundo.
+**Decisão:** declarar os pesos como tuplas literais no módulo:
+`(5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2)` para o primeiro dígito e
+`(6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2)` para o segundo. Tupla, e não lista, para que os
+vetores sejam imutáveis: são constantes de norma externa, não configuração ajustável.
 
 **Alternativa descartada:** gerar a sequência por um laço que cicla de 2 a 9.
 

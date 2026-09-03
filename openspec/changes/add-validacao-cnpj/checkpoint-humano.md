@@ -69,7 +69,7 @@ O papel foi o de **dono do escopo**: decidir o que pertence a esta unidade de tr
 não pertence. Essa decisão não é derivável do código, da especificação nem do defeito. Ela
 depende de coisas que só existem fora do repositório — que este Pull Request será lido por
 alguém, que a rastreabilidade entre a mudança e o motivo dela vale mais do que economizar um
-ciclo, e que um defeito com dois anos de idade pode esperar mais um dia.
+ciclo, e que um defeito de uma semana pode esperar mais um dia.
 
 O agente estava certo sobre o defeito e certo sobre a correção. Ele não tinha como estar certo
 sobre **quando**.

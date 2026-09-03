@@ -4,7 +4,8 @@ Documento da Etapa 1: definição das funcionalidades que serão especificadas a
 implementadas, e a justificativa da escolha.
 
 **Projeto:** `ia-dev-lab` — o mesmo iniciado na prática assíncrona da Aula 2.
-**Domínio existente:** validação de documentos brasileiros (hoje, apenas CPF).
+**Domínio existente no início desta atividade:** validação de documentos brasileiros, com
+apenas o CPF implementado.
 **Data:** 02/09/2026
 
 ---
@@ -60,7 +61,7 @@ não pode quebrar: cada problema vira uma entrada no relatório de erros.
 ## Por que estas funcionalidades são boas candidatas a SDD
 
 **Elas têm regra de negócio externa, não inventada por mim.** O algoritmo do CNPJ alfanumérico
-é definido por uma norma da Receita Federal que entrou em vigor há dois meses — se a
+é definido por uma norma da Receita Federal que entrou em vigor há pouco mais de um mês — se a
 especificação estiver errada, o código estará errado mesmo passando nos testes que eu mesmo
 escrevi, e nenhuma quantidade de refinamento de prompt corrige isso depois. Escrever a spec
 primeiro força a decidir *qual é a regra* antes de discutir *como implementá-la*.
