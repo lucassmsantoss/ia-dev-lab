@@ -11,9 +11,14 @@ com IA: configurar o ambiente, dar contexto explícito ao agente (`CLAUDE.md`), 
 código por domínio, comparar a qualidade de prompts diferentes e integrar tudo a Git/GitHub
 com revisão humana antes do merge.
 
-O domínio usado nos exercícios é a **validação de documentos brasileiros**, começando pelo CPF.
-É um problema deliberadamente pequeno, mas com regra de negócio verificável — o que permite
-comparar de forma objetiva o código gerado a partir de um prompt fraco e de um prompt eficaz.
+O domínio usado nos exercícios é a **validação de documentos brasileiros** — hoje, CPF e CNPJ.
+É um problema deliberadamente pequeno, mas com regra de negócio verificável, o que permite
+comparar de forma objetiva o resultado de abordagens diferentes.
+
+A validação de CNPJ aceita os **dois formatos em circulação**: o numérico, emitido até julho de
+2026, e o alfanumérico, emitido pela Receita Federal a partir de 31/07/2026, no qual as 12
+primeiras posições podem conter letras e apenas os dígitos verificadores permanecem numéricos.
+Os dois formatos coexistem com validade indeterminada.
 
 ## Estrutura
 
@@ -32,15 +37,34 @@ ia-dev-lab/
 |   |-- mcp-configuracao.md    # passo a passo e obstáculos do MCP (Etapa 5)
 |   |-- relatorio-final.md     # relatório da atividade (Etapa 6)
 |   `-- relatorio-final.pdf
+|-- openspec/                  # artefatos de Spec-Driven Development
+|   |-- config.yaml
+|   `-- changes/
+|       `-- add-validacao-cnpj/
+|           |-- proposal.md
+|           |-- design.md
+|           |-- tasks.md
+|           |-- revisao-do-plano.md
+|           |-- revisao-dos-diffs.md
+|           |-- checkpoint-humano.md
+|           `-- specs/validacao-cnpj/spec.md
 |-- src/
 |   `-- validacao/             # domínio: validação de documentos
 |       |-- CLAUDE.md          # regra customizada com escopo nesta pasta
 |       |-- __init__.py
-|       `-- cpf.py
+|       |-- cpf.py
+|       |-- cnpj.py
+|       `-- lote.py          # validação em lote a partir de CSV
 `-- tests/
     |-- __init__.py
-    `-- test_cpf.py
+    |-- test_cpf.py
+    |-- test_cnpj.py
+    `-- test_lote.py
 ```
+
+Em `docs/` também vivem os artefatos da atividade de Spec-Driven Development:
+[`escopo.md`](docs/escopo.md), [`spec-lote-csv.md`](docs/spec-lote-csv.md) e
+[`comparacao-abordagens-sdd.md`](docs/comparacao-abordagens-sdd.md).
 
 As pastas são organizadas por **domínio** (`validacao`), não por tipo técnico. Não existe
 `utils/` nem `helpers/`: quando surgir a validação de CNPJ, ela entra em `src/validacao/`
@@ -88,8 +112,17 @@ pip install -r requirements.txt
 | --- | --- |
 | `python -m pytest` | Roda toda a suíte de testes |
 | `python -m pytest tests/test_cpf.py -v` | Roda só os testes de CPF, caso a caso |
+| `python -m pytest tests/test_cnpj.py -v` | Roda só os testes de CNPJ, caso a caso |
 | `python -m pytest --cov=src` | Roda os testes com relatório de cobertura |
 | `python -m src.validacao.cpf 529.982.247-25` | Valida um CPF pela linha de comando |
+| `python -m src.validacao.cnpj 12.ABC.345/01DE-35` | Valida um CNPJ pela linha de comando |
+| `python -m src.validacao.lote base.csv documento` | Valida em lote os documentos de um CSV |
+| `openspec list` | Lista as mudanças especificadas com OpenSpec |
+
+A validação em lote infere o tipo de cada documento pelo comprimento, lê arquivos salvos pelo
+Excel (com BOM e separador `;`) e usa três códigos de saída: `0` quando todos são válidos,
+`1` quando há documentos inválidos e `2` quando não foi possível executar — o que permite
+encadeá-la em scripts sem confundir "a base tem erros" com "o processo quebrou".
 | `python hello.py` | Script de verificação inicial do ambiente |
 
 ## Documentação

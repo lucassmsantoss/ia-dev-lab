@@ -55,3 +55,7 @@ comparar objetivamente a qualidade do código gerado por prompts diferentes.
 - Não gerar código sem o teste correspondente em `tests/`.
 - Não reescrever arquivos inteiros quando a mudança pedida for pontual.
 - Não aceitar mensagem de commit gerada por IA sem revisar antes o `git diff`.
+- Não dar um teste por verificado se ele rodou em outro interpretador que não o Python 3.9
+  do projeto. Um verde obtido em versão mais nova encerra a dúvida sem resolvê-la — foi assim
+  que `Path.write_text(..., newline=...)`, que só existe a partir do 3.10, entrou no
+  repositório e quebrou 13 testes.
