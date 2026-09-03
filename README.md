@@ -33,10 +33,13 @@ ia-dev-lab/
 |-- docs/
 |   |-- adr/
 |   |   `-- 0001-escolha-da-ferramenta-de-ia.md
-|   |-- prompts-comparacao.md  # prompt fraco vs. prompt eficaz (Etapa 4)
-|   |-- mcp-configuracao.md    # passo a passo e obstáculos do MCP (Etapa 5)
-|   |-- relatorio-final.md     # relatório da atividade (Etapa 6)
-|   `-- relatorio-final.pdf
+|   |-- prompts-comparacao.md        # prompt fraco vs. prompt eficaz
+|   |-- mcp-configuracao.md          # passo a passo e obstáculos do MCP
+|   |-- relatorio-final.md/.pdf      # relatório da 1a atividade
+|   |-- escopo.md                    # funcionalidades escolhidas para SDD
+|   |-- spec-lote-csv.md             # spec manual da validação em lote
+|   |-- comparacao-abordagens-sdd.md # OpenSpec vs. Markdown manual
+|   `-- relatorio-sdd.md/.pdf        # relatório da 2a atividade
 |-- openspec/                  # artefatos de Spec-Driven Development
 |   |-- config.yaml
 |   `-- changes/
@@ -54,7 +57,7 @@ ia-dev-lab/
 |       |-- __init__.py
 |       |-- cpf.py
 |       |-- cnpj.py
-|       `-- lote.py          # validação em lote a partir de CSV
+|       `-- lote.py            # validação em lote a partir de CSV
 `-- tests/
     |-- __init__.py
     |-- test_cpf.py
@@ -62,13 +65,9 @@ ia-dev-lab/
     `-- test_lote.py
 ```
 
-Em `docs/` também vivem os artefatos da atividade de Spec-Driven Development:
-[`escopo.md`](docs/escopo.md), [`spec-lote-csv.md`](docs/spec-lote-csv.md) e
-[`comparacao-abordagens-sdd.md`](docs/comparacao-abordagens-sdd.md).
-
 As pastas são organizadas por **domínio** (`validacao`), não por tipo técnico. Não existe
-`utils/` nem `helpers/`: quando surgir a validação de CNPJ, ela entra em `src/validacao/`
-ao lado do CPF, e não em uma pasta genérica.
+`utils/` nem `helpers/`: foi assim que a validação de CNPJ entrou, ao lado do CPF, e é assim
+que entrará a próxima — a de Título de Eleitor, por exemplo.
 
 ## Instalação
 
@@ -81,7 +80,8 @@ cd ia-dev-lab
 ```
 
 **Com Anaconda (ambiente de referência):** abra o **Anaconda Prompt** e rode os comandos a
-partir da pasta do projeto. Nada mais precisa ser instalado.
+partir da pasta do projeto. O `pytest` já vem instalado; só o `pytest-cov`, usado no relatório
+de cobertura, precisa ser adicionado (`pip install pytest-cov`).
 
 **Com Python padrão:** crie um ambiente virtual e instale as dependências.
 
@@ -113,24 +113,38 @@ pip install -r requirements.txt
 | `python -m pytest` | Roda toda a suíte de testes |
 | `python -m pytest tests/test_cpf.py -v` | Roda só os testes de CPF, caso a caso |
 | `python -m pytest tests/test_cnpj.py -v` | Roda só os testes de CNPJ, caso a caso |
-| `python -m pytest --cov=src` | Roda os testes com relatório de cobertura |
+| `python -m pytest tests/test_lote.py -v` | Roda só os testes da validação em lote |
+| `python -m pytest --cov=src` | Roda os testes com cobertura (requer `pytest-cov`) |
 | `python -m src.validacao.cpf 529.982.247-25` | Valida um CPF pela linha de comando |
 | `python -m src.validacao.cnpj 12.ABC.345/01DE-35` | Valida um CNPJ pela linha de comando |
 | `python -m src.validacao.lote base.csv documento` | Valida em lote os documentos de um CSV |
+| `python hello.py` | Script de verificação inicial do ambiente |
 | `openspec list` | Lista as mudanças especificadas com OpenSpec |
 
 A validação em lote infere o tipo de cada documento pelo comprimento, lê arquivos salvos pelo
 Excel (com BOM e separador `;`) e usa três códigos de saída: `0` quando todos são válidos,
 `1` quando há documentos inválidos e `2` quando não foi possível executar — o que permite
 encadeá-la em scripts sem confundir "a base tem erros" com "o processo quebrou".
-| `python hello.py` | Script de verificação inicial do ambiente |
 
 ## Documentação
 
 - [`CLAUDE.md`](CLAUDE.md) — contexto do projeto, comandos, convenções e restrições para a IA.
 - [`src/validacao/CLAUDE.md`](src/validacao/CLAUDE.md) — regra customizada com escopo na pasta de validação.
 - [`docs/adr/`](docs/adr/) — Architecture Decision Records: decisões tomadas e o porquê.
+
+**Trabalho com prompts e ambiente (1ª atividade)**
+
 - [`docs/prompts-comparacao.md`](docs/prompts-comparacao.md) — comparativo entre prompt fraco e prompt eficaz.
+- [`docs/mcp-configuracao.md`](docs/mcp-configuracao.md) — configuração do servidor MCP e os obstáculos encontrados.
+- [`docs/relatorio-final.md`](docs/relatorio-final.md) — relatório da atividade.
+
+**Spec-Driven Development (2ª atividade)**
+
+- [`docs/escopo.md`](docs/escopo.md) — funcionalidades escolhidas e por que servem para SDD.
+- [`openspec/changes/add-validacao-cnpj/`](openspec/changes/add-validacao-cnpj/) — especificação do CNPJ com OpenSpec: proposta, spec, design, plano de tarefas, revisão do plano, revisão dos diffs e checkpoint humano.
+- [`docs/spec-lote-csv.md`](docs/spec-lote-csv.md) — especificação da validação em lote, em Markdown manual.
+- [`docs/comparacao-abordagens-sdd.md`](docs/comparacao-abordagens-sdd.md) — comparação entre as duas abordagens de especificação.
+- [`docs/relatorio-sdd.md`](docs/relatorio-sdd.md) — relatório da atividade.
 
 ## Convenções de contribuição
 

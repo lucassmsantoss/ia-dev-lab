@@ -109,9 +109,20 @@ como saber sozinho:
 > Usando o servidor MCP de filesystem, liste os arquivos dentro de `src/validacao/` e de
 > `tests/`, e me diga quantos casos de teste o arquivo `tests/test_cpf.py` declara.
 
-A resposta correta deve citar `CLAUDE.md`, `__init__.py` e `cpf.py` em `src/validacao/`, mais
-`__init__.py` e `test_cpf.py` em `tests/`. Se o agente responder de forma genérica, inventar
-nomes de arquivo ou pedir que o conteúdo seja colado, a conexão não está ativa.
+A resposta correta deve citar **exatamente os arquivos presentes nas duas pastas no momento do
+teste** — não uma lista plausível. O critério é esse, e não uma lista fixa, porque o conteúdo
+das pastas muda a cada atividade: quando este teste foi executado, em 27/08/2026,
+`src/validacao/` continha `CLAUDE.md`, `__init__.py` e `cpf.py`, e `tests/` continha
+`__init__.py` e `test_cpf.py`. Hoje há também `cnpj.py`, `lote.py`, `test_cnpj.py` e
+`test_lote.py`.
+
+Se o agente responder de forma genérica, citar arquivos que não estão lá ou pedir que o
+conteúdo seja colado, a conexão não está ativa.
+
+> **Evidência obtida em 27/08/2026:** o agente listou corretamente os cinco arquivos e ainda
+> incluiu o diretório `__pycache__/` nas duas pastas. Esse detalhe é a prova mais forte de que
+> a conexão estava ativa: `__pycache__/` está no `.gitignore`, não aparece no repositório
+> remoto e não havia sido mencionado em nenhum prompt — só existia no disco local.
 
 ## Servidor de Git: tentativa não concluída
 

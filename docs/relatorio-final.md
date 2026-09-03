@@ -30,6 +30,9 @@ O trecho de maior efeito prático não está no `CLAUDE.md` da raiz, e sim na re
 > `False`. Nunca levanta exceção. Sequências de dígitos repetidos (`"11111111111"`) são
 > rejeitadas, mesmo quando passam no cálculo do dígito verificador.
 
+*(Citação da versão vigente em 27/08/2026. O arquivo foi ampliado depois, na atividade de
+Spec-Driven Development, para cobrir também o CNPJ alfanumérico.)*
+
 Ele é o mais útil porque define o **contrato** da função, não o seu estilo. Regras de estilo
 (nomes, tipagem, tamanho de linha) tornam o código mais agradável; essas três linhas evitam
 três bugs concretos, sendo um deles um falso positivo de validação — o pior defeito possível
@@ -106,5 +109,5 @@ sujar o ambiente da máquina.
 - [x] Arquivo `.mcp.json` — servidor de filesystem configurado e testado
 - [x] Relatório final em Markdown e PDF
 
-**Evidência de execução:** `python -m pytest -q` → `38 passed in 0.09s`
+**Evidência de execução:** `python -m pytest tests/test_cpf.py -q` → `38 passed`
 (Anaconda, Python 3.9.12, pytest 7.1.1).
