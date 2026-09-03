@@ -19,3 +19,6 @@ htmlcov/
 Thumbs.db
 desktop.ini
 .DS_Store
+
+# Enunciados das atividades da disciplina — material do professor, não é entregável
+Aula*_Pratica_Assincrona*.pdf

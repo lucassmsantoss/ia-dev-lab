@@ -1,2 +1,4 @@
-pytest>=8.0
-pytest-cov>=5.0
+# O ambiente de referência é o Anaconda com Python 3.9.12, que já traz pytest 7.1.1.
+# O piso é 7.1 para não invalidar esse ambiente; versões mais novas também funcionam.
+pytest>=7.1
+pytest-cov>=2.12

@@ -11,17 +11,23 @@ O objetivo não é entregar um produto, e sim exercitar um fluxo de trabalho: co
 ambiente, dar contexto explícito à IA, organizar o projeto por domínio e integrar tudo a
 Git/GitHub com revisão humana.
 
-O domínio escolhido para os exercícios é **validação de documentos brasileiros**, começando
-pela validação de CPF. É um problema pequeno, com regra de negócio verificável, o que permite
-comparar objetivamente a qualidade do código gerado por prompts diferentes.
+O domínio escolhido para os exercícios é **validação de documentos brasileiros**: hoje, CPF,
+CNPJ (nos formatos numérico e alfanumérico) e validação em lote a partir de arquivo CSV. São
+problemas pequenos, com regra de negócio verificável, o que permite comparar objetivamente o
+resultado de abordagens diferentes de trabalho com IA.
 
 ## Comandos
 
 - `python -m pytest` -> roda toda a suíte de testes
 - `python -m pytest tests/test_cpf.py -v` -> roda só os testes de CPF, com detalhe de cada caso
-- `python -m pytest --cov=src` -> roda os testes com relatório de cobertura
+- `python -m pytest tests/test_cnpj.py -v` -> roda só os testes de CNPJ
+- `python -m pytest tests/test_lote.py -v` -> roda só os testes da validação em lote
+- `python -m pytest --cov=src` -> roda os testes com cobertura (requer `pytest-cov`)
 - `python -m src.validacao.cpf <numero>` -> valida um CPF pela linha de comando
-- `python hello.py` -> script de verificação inicial do ambiente (Etapa 1 da atividade)
+- `python -m src.validacao.cnpj <numero>` -> valida um CNPJ pela linha de comando
+- `python -m src.validacao.lote <arquivo.csv> [coluna]` -> valida em lote os documentos de um CSV
+- `python hello.py` -> script de verificação inicial do ambiente (Etapa 1 da Aula 2)
+- `openspec list` -> lista as mudanças especificadas com OpenSpec
 - `pip install -r requirements.txt` -> instala as dependências de desenvolvimento
 
 > No Windows com Anaconda, rode os comandos pelo **Anaconda Prompt** (ou pelo PowerShell após
