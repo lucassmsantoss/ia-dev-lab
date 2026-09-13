@@ -2,7 +2,7 @@
 
 import pytest
 
-from src.validacao.cpf import _calcular_digito, _normalizar, validar_cpf
+from src.validacao.cpf import _calcular_digito, _normalizar, mascarar_cpf, validar_cpf
 
 CPFS_VALIDOS_SEM_MASCARA = ["52998224725", "11144477735", "39053344705"]
 CPFS_VALIDOS_COM_MASCARA = ["529.982.247-25", "111.444.777-35", "390.533.447-05"]
@@ -104,3 +104,15 @@ def test_calcular_digito_reproduz_os_verificadores_conhecidos():
 def test_calcular_digito_retorna_zero_quando_o_resto_e_menor_que_dois():
     assert _calcular_digito("111444777") == 3
     assert _calcular_digito("390533447") == 0
+
+
+def test_mascarar_cpf_valido():
+    assert mascarar_cpf("52998224725") == "529.982.247-25"
+    assert mascarar_cpf("529.982.247-25") == "529.982.247-25"
+
+
+@pytest.mark.parametrize("cpf", [None, "", "11111111111", "5299822472", "cpf invalido"])
+def test_mascarar_cpf_invalido_devolve_none(cpf):
+    """Achados da tarefa sem TDD (docs/etapa2-tdd.md): a primeira versão não validava antes
+    de formatar e ora produzia máscara sem sentido, ora lançava TypeError para None."""
+    assert mascarar_cpf(cpf) is None

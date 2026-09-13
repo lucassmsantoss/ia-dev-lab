@@ -1,9 +1,9 @@
 """Validação de CPF (Cadastro de Pessoas Físicas)."""
 
 import sys
+from typing import Optional
 
 TAMANHO_CPF = 11
-
 
 DIGITOS = "0123456789"
 CARACTERES_FORMATACAO = ".- "
@@ -37,8 +37,8 @@ def validar_cpf(valor: str) -> bool:
     """Informa se `valor` é um CPF válido.
 
     Aceita o número com ou sem máscara. Qualquer entrada malformada — nula, vazia,
-    com tamanho incorreto, sem dígitos suficientes ou com todos os dígitos iguais —
-    resulta em False, nunca em exceção.
+    com tamanho incorreto, com caractere fora do conjunto `0-9` ou com todos os dígitos
+    iguais — resulta em False, nunca em exceção.
     """
     if not isinstance(valor, str):
         return False
@@ -58,6 +58,20 @@ def validar_cpf(valor: str) -> bool:
     segundo = _calcular_digito(candidato[:10])
 
     return candidato[9] == str(primeiro) and candidato[10] == str(segundo)
+
+
+def mascarar_cpf(cpf: str) -> Optional[str]:
+    """Formata um CPF válido no padrão XXX.XXX.XXX-XX; devolve None se `cpf` não for válido.
+
+    Exige um CPF válido (com ou sem máscara) em vez de apenas fatiar a string: a primeira
+    versão desta função fatiava a entrada sem checar nada antes, e produzia máscara para
+    entrada vazia, para CPF inválido e lançava `TypeError` para `None`. Ver
+    `docs/etapa2-tdd.md`, seção "Tarefa sem TDD", para o registro desses achados.
+    """
+    if not validar_cpf(cpf):
+        return None
+    digitos = _normalizar(cpf)
+    return f"{digitos[:3]}.{digitos[3:6]}.{digitos[6:9]}-{digitos[9:]}"
 
 
 if __name__ == "__main__":
