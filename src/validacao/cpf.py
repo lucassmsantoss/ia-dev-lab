@@ -21,6 +21,17 @@ def _normalizar(valor: str) -> str:
     return "".join(c for c in valor if c not in CARACTERES_FORMATACAO)
 
 
+def _ajustar_resto_modulo11(resto: int) -> int:
+    """Aplica a regra do dígito verificador módulo 11: 0 se o resto < 2, senão 11 - resto.
+
+    Duplicada, de propósito, em `cnpj.py` — ver `docs/etapa6-divida-tecnica.md` para a análise
+    de por que a duplicação foi mantida em vez de extraída para um módulo compartilhado, e
+    `tests/test_equivalencia_modulo11.py` para o teste que garante que as duas cópias
+    continuam concordando.
+    """
+    return 0 if resto < 2 else 11 - resto
+
+
 def _calcular_digito(digitos: str) -> int:
     """Calcula um dígito verificador de CPF a partir dos dígitos anteriores.
 
@@ -30,7 +41,7 @@ def _calcular_digito(digitos: str) -> int:
     soma = sum(int(digito) * (peso_inicial - posicao)
                for posicao, digito in enumerate(digitos))
     resto = soma % TAMANHO_CPF
-    return 0 if resto < 2 else TAMANHO_CPF - resto
+    return _ajustar_resto_modulo11(resto)
 
 
 def validar_cpf(valor: str) -> bool:

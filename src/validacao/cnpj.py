@@ -39,11 +39,22 @@ def _valor_caractere(caractere: str) -> int:
     return ord(caractere) - 48
 
 
+def _ajustar_resto_modulo11(resto: int) -> int:
+    """Aplica a regra do dígito verificador módulo 11: 0 se o resto < 2, senão 11 - resto.
+
+    Duplicada, de propósito, em `cpf.py` — ver `docs/etapa6-divida-tecnica.md` para a análise
+    de por que a duplicação foi mantida em vez de extraída para um módulo compartilhado, e
+    `tests/test_equivalencia_modulo11.py` para o teste que garante que as duas cópias
+    continuam concordando.
+    """
+    return 0 if resto < 2 else 11 - resto
+
+
 def _calcular_digito(base: str, pesos: tuple) -> int:
     """Calcula um dígito verificador pelo módulo 11 sobre `base`, usando `pesos`."""
     soma = sum(_valor_caractere(c) * p for c, p in zip(base, pesos))
     resto = soma % 11
-    return 0 if resto < 2 else 11 - resto
+    return _ajustar_resto_modulo11(resto)
 
 
 def validar_cnpj(valor: str) -> bool:
