@@ -22,6 +22,11 @@ def test_mascara_nao_altera_o_resultado():
     assert validar_cpf("529.982.247-25") == validar_cpf("52998224725")
 
 
+def test_aceita_cpf_valido_com_espacos_ao_redor():
+    assert validar_cpf("  529.982.247-25  ") is True
+    assert validar_cpf("52998224725   ") is True
+
+
 @pytest.mark.parametrize("cpf", ["52998224724", "52998224715", "11144477731"])
 def test_rejeita_digito_verificador_errado(cpf):
     assert validar_cpf(cpf) is False
