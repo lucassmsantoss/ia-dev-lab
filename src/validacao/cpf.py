@@ -5,9 +5,20 @@ import sys
 TAMANHO_CPF = 11
 
 
-def _somente_digitos(valor: str) -> str:
-    """Remove qualquer caractere que não seja dígito, preservando a ordem."""
-    return "".join(caractere for caractere in valor if caractere.isdigit())
+DIGITOS = "0123456789"
+CARACTERES_FORMATACAO = ".- "
+
+
+def _normalizar(valor: str) -> str:
+    """Remove apenas os caracteres de formatação do CPF (`.`, `-` e espaço).
+
+    Diferente de descartar "tudo que não é dígito": qualquer caractere inesperado que não
+    seja formatação sobrevive aqui, para que a checagem de conjunto o rejeite depois. Ver
+    `openspec/changes/fix-normalizacao-cpf/` — antes desta correção, a função descartava
+    silenciosamente qualquer caractere não numérico, o que fazia `"<script>52998224725</script>"`
+    validar como CPF correto.
+    """
+    return "".join(c for c in valor if c not in CARACTERES_FORMATACAO)
 
 
 def _calcular_digito(digitos: str) -> int:
@@ -32,18 +43,21 @@ def validar_cpf(valor: str) -> bool:
     if not isinstance(valor, str):
         return False
 
-    digitos = _somente_digitos(valor)
+    candidato = _normalizar(valor)
 
-    if len(digitos) != TAMANHO_CPF:
+    if len(candidato) != TAMANHO_CPF:
         return False
 
-    if len(set(digitos)) == 1:
+    if any(c not in DIGITOS for c in candidato):
         return False
 
-    primeiro = _calcular_digito(digitos[:9])
-    segundo = _calcular_digito(digitos[:10])
+    if len(set(candidato)) == 1:
+        return False
 
-    return digitos[9] == str(primeiro) and digitos[10] == str(segundo)
+    primeiro = _calcular_digito(candidato[:9])
+    segundo = _calcular_digito(candidato[:10])
+
+    return candidato[9] == str(primeiro) and candidato[10] == str(segundo)
 
 
 if __name__ == "__main__":

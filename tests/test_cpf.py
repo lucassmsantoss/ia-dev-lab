@@ -2,7 +2,7 @@
 
 import pytest
 
-from src.validacao.cpf import _calcular_digito, _somente_digitos, validar_cpf
+from src.validacao.cpf import _calcular_digito, _normalizar, validar_cpf
 
 CPFS_VALIDOS_SEM_MASCARA = ["52998224725", "11144477735", "39053344705"]
 CPFS_VALIDOS_COM_MASCARA = ["529.982.247-25", "111.444.777-35", "390.533.447-05"]
@@ -85,10 +85,10 @@ def test_rejeita_digito_nao_ascii_sem_lancar_excecao(cpf):
     assert validar_cpf(cpf) is False
 
 
-def test_somente_digitos_remove_a_mascara():
-    assert _somente_digitos("529.982.247-25") == "52998224725"
-    assert _somente_digitos(" 529 982 247 25 ") == "52998224725"
-    assert _somente_digitos("sem numero") == ""
+def test_normalizar_remove_apenas_formatacao():
+    assert _normalizar("529.982.247-25") == "52998224725"
+    assert _normalizar(" 529 982 247 25 ") == "52998224725"
+    assert _normalizar("sem numero") == "semnumero"
 
 
 def test_calcular_digito_reproduz_os_verificadores_conhecidos():
