@@ -56,6 +56,35 @@ def test_rejeita_entrada_com_caracteres_nao_numericos(cpf):
     assert validar_cpf(cpf) is False
 
 
+@pytest.mark.parametrize("cpf", [
+    "<script>52998224725</script>",
+    "529.982.247-25!!!",
+    "CPF: 529.982.247-25",
+])
+def test_rejeita_cpf_valido_cercado_de_lixo(cpf):
+    """Regressão do Achado 1 de revisao-dos-diffs.md.
+
+    A normalização antiga (`_somente_digitos`) descartava qualquer caractere que não fosse
+    dígito, então um CPF válido embutido em texto arbitrário passava. A normalização atual
+    remove só `.`, `-` e espaço; qualquer outro caractere sobrevive para ser rejeitado pela
+    checagem de conjunto.
+    """
+    assert validar_cpf(cpf) is False
+
+
+@pytest.mark.parametrize("cpf", ["²2998224725", "٥2998224725"])
+def test_rejeita_digito_nao_ascii_sem_lancar_excecao(cpf):
+    """Regressão do Achado 2 de revisao-dos-diffs.md.
+
+    `str.isdigit()` é verdadeiro para caracteres que não pertencem a `0-9` (expoentes como
+    "²", dígitos indo-arábicos como "٥"). Um deles fazia `_calcular_digito` levantar
+    `ValueError` ao chamar `int()`; o outro era aceito como válido silenciosamente. A checagem
+    de conjunto atual (`c not in DIGITOS`) compara contra `"0123456789"` explicitamente, então
+    nenhum dos dois chega ao cálculo do dígito verificador.
+    """
+    assert validar_cpf(cpf) is False
+
+
 def test_somente_digitos_remove_a_mascara():
     assert _somente_digitos("529.982.247-25") == "52998224725"
     assert _somente_digitos(" 529 982 247 25 ") == "52998224725"
