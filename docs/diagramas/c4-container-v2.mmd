@@ -1,0 +1,22 @@
+C4Container
+    title Diagrama de Contêiner - ia-dev-lab (versão 2, com o contexto da Etapa 4)
+
+    Person(usuario, "Usuário/Sistema", "Consome via CLI (lote.py, cpf.py, cnpj.py) ou como biblioteca (import src.validacao)")
+
+    System_Boundary(lab, "ia-dev-lab") {
+        Container_Boundary(dominio, "Domínio: validação de documentos (src/validacao/)") {
+            Container(cpf, "cpf.py", "Python, função pura", "validar_cpf(str) -> bool. Exportado em __init__.py.")
+            Container(cnpj, "cnpj.py", "Python, função pura", "validar_cnpj(str) -> bool. Exportado em __init__.py.")
+        }
+        Container(lote, "lote.py", "Python, orquestrador", "Não exportado em __init__.py. Único consumidor interno dos dois validadores.")
+    }
+
+    System_Ext(csv, "Arquivo CSV", "Excel/Windows: BOM, separador ';', linha malformada")
+
+    Rel(usuario, lote, "Executa", "CLI: python -m src.validacao.lote")
+    Rel(usuario, cpf, "Importa", "biblioteca: from src.validacao import validar_cpf")
+    Rel(usuario, cnpj, "Importa", "biblioteca: from src.validacao import validar_cnpj")
+    Rel(lote, cpf, "Chama", "validar_cpf() -- decide por tamanho da string (11), nao por regra importada")
+    Rel(lote, cnpj, "Chama", "validar_cnpj() -- decide por tamanho da string (14)")
+    Rel(lote, csv, "Le", "utf-8-sig, deteccao de separador")
+    Rel(cpf, cnpj, "Duplica (sem import)", "_ajustar_resto_modulo11 -- mesma regra, copiada -- ver ADR 0002")
