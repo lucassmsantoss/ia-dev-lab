@@ -11,17 +11,26 @@ O objetivo não é entregar um produto, e sim exercitar um fluxo de trabalho: co
 ambiente, dar contexto explícito à IA, organizar o projeto por domínio e integrar tudo a
 Git/GitHub com revisão humana.
 
-O domínio escolhido para os exercícios é **validação de documentos brasileiros**, começando
-pela validação de CPF. É um problema pequeno, com regra de negócio verificável, o que permite
-comparar objetivamente a qualidade do código gerado por prompts diferentes.
+O domínio escolhido para os exercícios é **validação de documentos brasileiros**: hoje, CPF,
+CNPJ (nos formatos numérico e alfanumérico) e validação em lote a partir de arquivo CSV. São
+problemas pequenos, com regra de negócio verificável, o que permite comparar objetivamente o
+resultado de abordagens diferentes de trabalho com IA.
 
 ## Comandos
 
 - `python -m pytest` -> roda toda a suíte de testes
 - `python -m pytest tests/test_cpf.py -v` -> roda só os testes de CPF, com detalhe de cada caso
-- `python -m pytest --cov=src` -> roda os testes com relatório de cobertura
+- `python -m pytest tests/test_cnpj.py -v` -> roda só os testes de CNPJ
+- `python -m pytest tests/test_lote.py -v` -> roda só os testes da validação em lote
+- `python -m pytest --cov=src` -> roda os testes com cobertura (requer `pytest-cov`)
+- `ruff check src/ --select ALL` -> análise estática rígida (ver `docs/etapa6-divida-tecnica.md`)
 - `python -m src.validacao.cpf <numero>` -> valida um CPF pela linha de comando
-- `python hello.py` -> script de verificação inicial do ambiente (Etapa 1 da atividade)
+- `python -m src.validacao.cnpj <numero>` -> valida um CNPJ pela linha de comando
+- `python -m src.validacao.lote <arquivo.csv> [coluna]` -> valida em lote os documentos de um CSV
+- `python hello.py` -> script de verificação inicial do ambiente (Etapa 1 da Aula 2)
+- `openspec list` -> lista as mudanças especificadas com OpenSpec
+- `git config core.hooksPath .githooks` -> ativa o guardrail de pré-commit (uma vez por clone;
+  ver `docs/etapa1-hook.md`)
 - `pip install -r requirements.txt` -> instala as dependências de desenvolvimento
 
 > No Windows com Anaconda, rode os comandos pelo **Anaconda Prompt** (ou pelo PowerShell após
@@ -34,7 +43,9 @@ comparar objetivamente a qualidade do código gerado por prompts diferentes.
   referência do projeto é o Anaconda com Python 3.9.12 no Windows — não usar sintaxe
   posterior ao 3.9 (`match`, `int | None`, `tomllib`) sem antes atualizar esta linha.
 - Organização por **domínio**, não por tipo técnico: o código de validação vive em
-  `src/validacao/`, não em uma pasta genérica `utils/` ou `helpers/`.
+  `src/validacao/`, não em uma pasta genérica `utils/` ou `helpers/`. Uma regra que se repete
+  entre dois validadores é duplicada de propósito, com um teste de equivalência cobrindo as
+  duas cópias — não vira desculpa para criar essa pasta. Ver ADR 0002.
 - Todo módulo em `src/` tem um arquivo de teste espelhado em `tests/`, com o prefixo `test_`.
 - Funções públicas levam *type hints* e docstring curta, em português, explicando **o que** a
   função garante — não como ela faz.
@@ -49,12 +60,20 @@ comparar objetivamente a qualidade do código gerado por prompts diferentes.
 
 - Não instalar bibliotecas externas para resolver o que a biblioteca padrão já resolve —
   em especial, não usar pacotes de validação de CPF prontos: a regra tem que estar no código.
-- Não criar pastas por tipo técnico (`utils/`, `helpers/`, `common/`, `misc/`).
+- Não criar pastas por tipo técnico (`utils/`, `helpers/`, `common/`, `misc/`) — nem para
+  hospedar lógica duplicada entre validadores. Ver ADR 0002.
 - Não commitar direto na `main`: toda alteração passa por branch e Pull Request.
 - Não usar `print()` para depuração dentro de `src/` — o retorno da função é a interface.
 - Não gerar código sem o teste correspondente em `tests/`.
 - Não reescrever arquivos inteiros quando a mudança pedida for pontual.
 - Não aceitar mensagem de commit gerada por IA sem revisar antes o `git diff`.
+- Não apagar ou reduzir um arquivo em `tests/` para "fazer o commit passar" — o hook de
+  pré-commit (`.githooks/pre-commit`) bloqueia isso; se a exclusão for legítima, use
+  `PERMITIR_EDICAO_DESTRUTIVA_TESTS=1 git commit ...` e justifique na mensagem do commit.
+- Não alterar comportamento de um módulo de `src/validacao/` já consumido e coberto por testes
+  verdes dentro de uma mudança cujo escopo não declarou isso — é o checkpoint humano do
+  projeto (`openspec/changes/add-validacao-cnpj/checkpoint-humano.md`,
+  `docs/etapa3-checkpoint.md`). Pare e abra uma mudança própria.
 - Não dar um teste por verificado se ele rodou em outro interpretador que não o Python 3.9
   do projeto. Um verde obtido em versão mais nova encerra a dúvida sem resolvê-la — foi assim
   que `Path.write_text(..., newline=...)`, que só existe a partir do 3.10, entrou no

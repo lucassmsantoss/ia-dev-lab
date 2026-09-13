@@ -1,0 +1,56 @@
+#!/bin/sh
+# Guardrail da Etapa 1 (Harness e Arquitetura na Prática).
+#
+# Bloqueia, de fato, dois jeitos de enfraquecer a rede de segurança de testes sem que
+# ninguém tenha decidido isso conscientemente:
+#
+#   1. Apagar um arquivo de teste inteiro.
+#   2. Reduzir um arquivo de teste de forma desproporcional (muito mais linha removida do
+#      que adicionada), sinal comum de "comentei/apaguei uns testes para o commit passar".
+#
+# O risco que isto mitiga é específico deste projeto: TDD (Etapa 2) e o checkpoint humano
+# de src/validacao/ (ver openspec/changes/add-validacao-cnpj/checkpoint-humano.md) dependem
+# de a suíte de testes ser uma rede de segurança confiável. Um agente de IA sob pressão para
+# "fazer o commit passar" tem exatamente esse atalho disponível, e ele não aparece no diff
+# do código de produção.
+#
+# Instalação (uma vez por clone): git config core.hooksPath .githooks
+# Escape consciente, com justificativa exigida no commit: PERMITIR_EDICAO_DESTRUTIVA_TESTS=1
+
+LIMIAR_LINHAS_REMOVIDAS=3
+
+apagados=$(git diff --cached --diff-filter=D --name-only -- tests/)
+if [ -n "$apagados" ]; then
+    echo "BLOQUEADO pelo hook pre-commit: exclusao de arquivo(s) de teste no commit:" >&2
+    echo "$apagados" | sed 's/^/  - /' >&2
+    echo "" >&2
+    echo "Se isto e intencional (ex.: teste obsoleto apos remocao de funcionalidade)," >&2
+    echo "refaca o commit com: PERMITIR_EDICAO_DESTRUTIVA_TESTS=1 git commit ..." >&2
+    if [ -z "$PERMITIR_EDICAO_DESTRUTIVA_TESTS" ]; then
+        exit 1
+    fi
+    echo "PERMITIR_EDICAO_DESTRUTIVA_TESTS=1 definido: prosseguindo mesmo assim." >&2
+fi
+
+bloqueado_por_reducao=0
+git diff --cached --numstat -- tests/ | while read -r adicionadas removidas arquivo; do
+    # numstat usa "-" para arquivo binario; ignora.
+    [ "$adicionadas" = "-" ] && continue
+    if [ "$removidas" -gt "$adicionadas" ] && [ "$removidas" -ge "$LIMIAR_LINHAS_REMOVIDAS" ]; then
+        echo "BLOQUEADO pelo hook pre-commit: $arquivo perde $removidas linha(s) e ganha" \
+             "apenas $adicionadas -- parece reducao de cobertura de teste, nao refatoracao." >&2
+        echo "1" > /tmp/.pre-commit-bloqueio-teste
+    fi
+done
+
+if [ -f /tmp/.pre-commit-bloqueio-teste ]; then
+    rm -f /tmp/.pre-commit-bloqueio-teste
+    if [ -z "$PERMITIR_EDICAO_DESTRUTIVA_TESTS" ]; then
+        echo "" >&2
+        echo "Se isto e intencional, refaca com: PERMITIR_EDICAO_DESTRUTIVA_TESTS=1 git commit ..." >&2
+        exit 1
+    fi
+    echo "PERMITIR_EDICAO_DESTRUTIVA_TESTS=1 definido: prosseguindo mesmo assim." >&2
+fi
+
+exit 0

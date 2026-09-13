@@ -1,0 +1,17 @@
+C4Container
+    title Diagrama de Contêiner - ia-dev-lab (versão 1, direta)
+
+    Person(usuario, "Usuário/Sistema", "Chama a validação via CLI ou como biblioteca Python")
+
+    System_Boundary(lab, "ia-dev-lab") {
+        Container(lote, "lote.py", "Python", "Orquestrador: lê CSV, chama validadores, formata relatório, expõe CLI")
+        Container(cpf, "cpf.py", "Python", "Validador puro de CPF")
+        Container(cnpj, "cnpj.py", "Python", "Validador puro de CNPJ")
+    }
+
+    System_Ext(csv, "Arquivo CSV", "Base de documentos a validar")
+
+    Rel(usuario, lote, "Executa", "CLI / import Python")
+    Rel(lote, cpf, "Chama validar_cpf()")
+    Rel(lote, cnpj, "Chama validar_cnpj()")
+    Rel(lote, csv, "Lê", "utf-8-sig")

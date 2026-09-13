@@ -5,11 +5,23 @@ tem precedência sobre o `CLAUDE.md` da raiz em caso de conflito.
 
 ## Contexto deste escopo
 
-Esta pasta guarda validadores de documentos brasileiros. Cada arquivo cobre um único
-documento (`cpf.py`, `cnpj.py`, e futuramente `titulo_eleitor.py`). São funções puras:
-recebem uma string, devolvem um booleano, não acessam rede, disco nem variáveis de ambiente.
+Esta pasta guarda o domínio de validação de documentos brasileiros, e tem **dois tipos de
+arquivo com regras diferentes**.
 
-## Convenções obrigatórias aqui
+**Validadores puros** — `cpf.py`, `cnpj.py`, e futuramente `titulo_eleitor.py`. Cada arquivo
+cobre um único documento. São funções puras: recebem uma string, devolvem um booleano, não
+acessam rede, disco nem variáveis de ambiente. As convenções da seção seguinte valem para eles.
+
+**Orquestradores** — hoje apenas `lote.py`, que lê arquivos CSV e aplica os validadores a
+cada linha. Ele é serviço de aplicação, não domínio: pode acessar disco, expor mais de uma
+função pública e ter interface de linha de comando. Suas regras estão em
+"Convenções dos orquestradores", mais abaixo. Um orquestrador **nunca** contém regra de
+validação própria — ele chama os validadores puros.
+
+Apenas os validadores puros são exportados em `__init__.py`. Quem importa `src.validacao` para
+validar um documento não deve receber junto uma função que abre arquivos.
+
+## Convenções obrigatórias dos validadores puros
 
 - Cada validador expõe uma função pública única chamada `validar_<documento>`
   (ex.: `validar_cpf`). Funções auxiliares são privadas, com prefixo `_`.
@@ -21,7 +33,8 @@ recebem uma string, devolvem um booleano, não acessam rede, disco nem variávei
 - A normalização remove **apenas caracteres de formatação**, nunca "tudo que não é dígito".
   Um caractere inesperado precisa sobreviver à normalização para ser **rejeitado** pela
   checagem de conjunto — descartá-lo silenciosamente faz `"52998224725abc"` virar um
-  documento válido.
+  documento válido. Foi exatamente esse defeito, presente em `cpf.py` até a atividade de
+  Harness e Arquitetura, que motivou `openspec/changes/fix-normalizacao-cpf/`.
 - Depois de normalizar, valide o **conjunto de caracteres** antes de qualquer conversão
   numérica. Nunca use `str.isdigit()` para isso: ele é verdadeiro para `"²"` e para
   dígitos indo-arábicos, que não pertencem ao documento. Compare contra `"0123456789"`.
@@ -37,6 +50,27 @@ recebem uma string, devolvem um booleano, não acessam rede, disco nem variávei
   não embutido dentro do `validar_*`.
 - Constantes vindas de norma externa (pesos, tabelas de conversão) são **transcritas
   literalmente**, não geradas por laço. Ver `design.md` da mudança `add-validacao-cnpj`.
+- Se uma regra matemática (ex.: o ajuste de resto do módulo 11) precisar existir em mais de
+  um validador, **duplique a função em vez de criar uma pasta de tipo técnico** (`utils/`,
+  `_comum.py`) — decisão registrada no ADR 0002 — mas adicione um teste de equivalência em
+  `tests/` cobrindo as duas cópias contra a mesma faixa de entradas, para que uma divergência
+  vire teste vermelho em vez de bug silencioso. Ver `_ajustar_resto_modulo11` em `cpf.py` e
+  `cnpj.py`, e `tests/test_equivalencia_modulo11.py`.
+
+## Convenções dos orquestradores
+
+- Nenhuma regra de validação vive aqui. O orquestrador decide **qual** validador chamar; ele
+  não decide se um documento é válido.
+- A leitura de arquivo e a formatação para a tela ficam separadas: uma função devolve dados,
+  outra os apresenta. Isso é o que permite usar o módulo como biblioteca e como comando.
+- `print()` é permitido apenas na camada de linha de comando, nunca nas funções de dados.
+- Códigos de saída seguem o contrato: `0` sucesso, `1` há documentos inválidos, `2` não foi
+  possível executar. Alterar esse contrato exige o checkpoint humano — scripts de terceiros
+  dependem dele.
+- Erros de execução (arquivo ausente, coluna inexistente) são exceções próprias e nomeadas,
+  não valores de retorno. A regra de "nunca levantar exceção" vale para os validadores puros,
+  onde entrada malformada é um resultado; aqui, não conseguir abrir o arquivo não é resultado
+  nenhum.
 
 ## Ao gerar ou alterar código aqui
 

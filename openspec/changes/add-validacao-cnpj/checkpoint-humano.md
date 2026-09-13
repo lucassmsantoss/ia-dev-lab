@@ -79,9 +79,12 @@ sobre **quando**.
 - [x] Defeitos documentados em `revisao-dos-diffs.md`, com reprodução verificada
 - [x] Regra atualizada em `src/validacao/CLAUDE.md`, proibindo `str.isdigit()` e a remoção
       genérica de caracteres — de modo que o próximo código gerado já nasça correto
-- [ ] Abrir a mudança `fix-normalizacao-cpf` com proposta, spec e plano próprios
-- [ ] Incluir na spec dessa mudança o caso ausente: entrada inválida que **contém** uma
-      entrada válida
+- [x] Abrir a mudança `fix-normalizacao-cpf` com proposta, spec e plano próprios — ver
+      [`openspec/changes/fix-normalizacao-cpf/`](../fix-normalizacao-cpf/), conduzida na
+      atividade de Harness e Arquitetura
+- [x] Incluir na spec dessa mudança o caso ausente: entrada inválida que **contém** uma
+      entrada válida — cobertos por `test_rejeita_cpf_valido_cercado_de_lixo` em
+      `tests/test_cpf.py`
 
 Os dois itens marcados foram feitos porque documentar o defeito e fechar a porta para que ele
 se repita não altera comportamento — e portanto não esbarram no checkpoint.

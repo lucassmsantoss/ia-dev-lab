@@ -1,0 +1,615 @@
+======================================================================
+Evidencia de execucao real -- Atividade Harness e Arquitetura na Pratica
+======================================================================
+
+$ git rev-parse --is-inside-work-tree
+true
+[codigo de saida: 0]
+
+$ git branch --show-current
+feature/harness-arquitetura-3a-atividade
+[codigo de saida: 0]
+
+$ git config core.hooksPath .githooks
+
+[codigo de saida: 0]
+
+$ git config core.hooksPath
+.githooks
+[codigo de saida: 0]
+
+[hooksPath] .githooks
+$ git log --oneline --grep=fix-normalizacao-cpf
+
+[codigo de saida: 0]
+
+[reset] cpf.py revertido ao estado anterior a esta atividade, para que o proximo RED seja genuino (nao simulado).
+[escrito] src/validacao/cpf.py (1635 bytes)
+$ git add .githooks/pre-commit docs/etapa1-hook.md
+
+[codigo de saida: 0]
+
+$ git diff --cached --quiet
+
+[codigo de saida: 1]
+
+$ git commit -m Adiciona guardrail de pre-commit que bloqueia edicao destrutiva em tests/ (Etapa 1)
+[feature/harness-arquitetura-3a-atividade 1755c81] Adiciona guardrail de pre-commit que bloqueia edicao destrutiva em tests/ (Etapa 1)
+ 2 files changed, 157 insertions(+)
+ create mode 100644 .githooks/pre-commit
+ create mode 100644 docs/etapa1-hook.md
+[codigo de saida: 0]
+
+[escrito] tests/test_cpf.py (3705 bytes)
+--- Rodando pytest com os testes novos e o cpf.py ainda com o defeito (RED esperado) ---
+$ python -m pytest tests/test_cpf.py -v
+============================= test session starts =============================
+platform win32 -- Python 3.9.12, pytest-7.1.1, pluggy-1.6.0 -- C:\Users\lucas\anaconda3\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\lucas\Saida one drive\Documentos\Mestrado\TÓPICOS AVANÇADOS EM ENGENHARIA DE SOFTWARE 2\ia-dev-lab
+plugins: anyio-3.5.0, cov-7.1.0
+collecting ... collected 43 items
+
+tests/test_cpf.py::test_aceita_cpf_valido_sem_mascara[52998224725] PASSED [  2%]
+tests/test_cpf.py::test_aceita_cpf_valido_sem_mascara[11144477735] PASSED [  4%]
+tests/test_cpf.py::test_aceita_cpf_valido_sem_mascara[39053344705] PASSED [  6%]
+tests/test_cpf.py::test_aceita_cpf_valido_com_mascara[529.982.247-25] PASSED [  9%]
+tests/test_cpf.py::test_aceita_cpf_valido_com_mascara[111.444.777-35] PASSED [ 11%]
+tests/test_cpf.py::test_aceita_cpf_valido_com_mascara[390.533.447-05] PASSED [ 13%]
+tests/test_cpf.py::test_mascara_nao_altera_o_resultado PASSED            [ 16%]
+tests/test_cpf.py::test_rejeita_digito_verificador_errado[52998224724] PASSED [ 18%]
+tests/test_cpf.py::test_rejeita_digito_verificador_errado[52998224715] PASSED [ 20%]
+tests/test_cpf.py::test_rejeita_digito_verificador_errado[11144477731] PASSED [ 23%]
+tests/test_cpf.py::test_rejeita_sequencia_de_digitos_repetidos[00000000000] PASSED [ 25%]
+tests/test_cpf.py::test_rejeita_sequencia_de_digitos_repetidos[11111111111] PASSED [ 27%]
+tests/test_cpf.py::test_rejeita_sequencia_de_digitos_repetidos[22222222222] PASSED [ 30%]
+tests/test_cpf.py::test_rejeita_sequencia_de_digitos_repetidos[33333333333] PASSED [ 32%]
+tests/test_cpf.py::test_rejeita_sequencia_de_digitos_repetidos[44444444444] PASSED [ 34%]
+tests/test_cpf.py::test_rejeita_sequencia_de_digitos_repetidos[55555555555] PASSED [ 37%]
+tests/test_cpf.py::test_rejeita_sequencia_de_digitos_repetidos[66666666666] PASSED [ 39%]
+tests/test_cpf.py::test_rejeita_sequencia_de_digitos_repetidos[77777777777] PASSED [ 41%]
+tests/test_cpf.py::test_rejeita_sequencia_de_digitos_repetidos[88888888888] PASSED [ 44%]
+tests/test_cpf.py::test_rejeita_sequencia_de_digitos_repetidos[99999999999] PASSED [ 46%]
+tests/test_cpf.py::test_rejeita_sequencia_repetida_com_mascara PASSED    [ 48%]
+tests/test_cpf.py::test_rejeita_entrada_com_tamanho_invalido[] PASSED    [ 51%]
+tests/test_cpf.py::test_rejeita_entrada_com_tamanho_invalido[   ] PASSED [ 53%]
+tests/test_cpf.py::test_rejeita_entrada_com_tamanho_invalido[5299822472] PASSED [ 55%]
+tests/test_cpf.py::test_rejeita_entrada_com_tamanho_invalido[529982247251] PASSED [ 58%]
+tests/test_cpf.py::test_rejeita_entrada_com_tamanho_invalido[...] PASSED [ 60%]
+tests/test_cpf.py::test_rejeita_entrada_que_nao_e_string[None] PASSED    [ 62%]
+tests/test_cpf.py::test_rejeita_entrada_que_nao_e_string[52998224725] PASSED [ 65%]
+tests/test_cpf.py::test_rejeita_entrada_que_nao_e_string[3.14] PASSED    [ 67%]
+tests/test_cpf.py::test_rejeita_entrada_que_nao_e_string[valor3] PASSED  [ 69%]
+tests/test_cpf.py::test_rejeita_entrada_que_nao_e_string[valor4] PASSED  [ 72%]
+tests/test_cpf.py::test_rejeita_entrada_que_nao_e_string[True] PASSED    [ 74%]
+tests/test_cpf.py::test_rejeita_entrada_com_caracteres_nao_numericos[abcdefghijk] PASSED [ 76%]
+tests/test_cpf.py::test_rejeita_entrada_com_caracteres_nao_numericos[529.982.247-2a] PASSED [ 79%]
+tests/test_cpf.py::test_rejeita_entrada_com_caracteres_nao_numericos[CPF invalido] PASSED [ 81%]
+tests/test_cpf.py::test_rejeita_cpf_valido_cercado_de_lixo[<script>52998224725</script>] FAILED [ 83%]
+tests/test_cpf.py::test_rejeita_cpf_valido_cercado_de_lixo[529.982.247-25!!!] FAILED [ 86%]
+tests/test_cpf.py::test_rejeita_cpf_valido_cercado_de_lixo[CPF: 529.982.247-25] FAILED [ 88%]
+tests/test_cpf.py::test_rejeita_digito_nao_ascii_sem_lancar_excecao[\xb22998224725] FAILED [ 90%]
+tests/test_cpf.py::test_rejeita_digito_nao_ascii_sem_lancar_excecao[\u06652998224725] FAILED [ 93%]
+tests/test_cpf.py::test_somente_digitos_remove_a_mascara PASSED          [ 95%]
+tests/test_cpf.py::test_calcular_digito_reproduz_os_verificadores_conhecidos PASSED [ 97%]
+tests/test_cpf.py::test_calcular_digito_retorna_zero_quando_o_resto_e_menor_que_dois PASSED [100%]
+
+================================== FAILURES ===================================
+____ test_rejeita_cpf_valido_cercado_de_lixo[<script>52998224725</script>] ____
+
+cpf = '<script>52998224725</script>'
+
+    @pytest.mark.parametrize("cpf", [
+        "<script>52998224725</script>",
+        "529.982.247-25!!!",
+        "CPF: 529.982.247-25",
+    ])
+    def test_rejeita_cpf_valido_cercado_de_lixo(cpf):
+        """Regressão do Achado 1 de revisao-dos-diffs.md.
+    
+        A normalização antiga (`_somente_digitos`) descartava qualquer caractere que não fosse
+        dígito, então um CPF válido embutido em texto arbitrário passava. A normalização atual
+        remove só `.`, `-` e espaço; qualquer outro caractere sobrevive para ser rejeitado pela
+        checagem de conjunto.
+        """
+>       assert validar_cpf(cpf) is False
+E       AssertionError: assert True is False
+E        +  where True = validar_cpf('<script>52998224725</script>')
+
+tests\test_cpf.py:72: AssertionError
+_________ test_rejeita_cpf_valido_cercado_de_lixo[529.982.247-25!!!] __________
+
+cpf = '529.982.247-25!!!'
+
+    @pytest.mark.parametrize("cpf", [
+        "<script>52998224725</script>",
+        "529.982.247-25!!!",
+        "CPF: 529.982.247-25",
+    ])
+    def test_rejeita_cpf_valido_cercado_de_lixo(cpf):
+        """Regressão do Achado 1 de revisao-dos-diffs.md.
+    
+        A normalização antiga (`_somente_digitos`) descartava qualquer caractere que não fosse
+        dígito, então um CPF válido embutido em texto arbitrário passava. A normalização atual
+        remove só `.`, `-` e espaço; qualquer outro caractere sobrevive para ser rejeitado pela
+        checagem de conjunto.
+        """
+>       assert validar_cpf(cpf) is False
+E       AssertionError: assert True is False
+E        +  where True = validar_cpf('529.982.247-25!!!')
+
+tests\test_cpf.py:72: AssertionError
+________ test_rejeita_cpf_valido_cercado_de_lixo[CPF: 529.982.247-25] _________
+
+cpf = 'CPF: 529.982.247-25'
+
+    @pytest.mark.parametrize("cpf", [
+        "<script>52998224725</script>",
+        "529.982.247-25!!!",
+        "CPF: 529.982.247-25",
+    ])
+    def test_rejeita_cpf_valido_cercado_de_lixo(cpf):
+        """Regressão do Achado 1 de revisao-dos-diffs.md.
+    
+        A normalização antiga (`_somente_digitos`) descartava qualquer caractere que não fosse
+        dígito, então um CPF válido embutido em texto arbitrário passava. A normalização atual
+        remove só `.`, `-` e espaço; qualquer outro caractere sobrevive para ser rejeitado pela
+        checagem de conjunto.
+        """
+>       assert validar_cpf(cpf) is False
+E       AssertionError: assert True is False
+E        +  where True = validar_cpf('CPF: 529.982.247-25')
+
+tests\test_cpf.py:72: AssertionError
+______ test_rejeita_digito_nao_ascii_sem_lancar_excecao[\xb22998224725] _______
+
+cpf = '²2998224725'
+
+    @pytest.mark.parametrize("cpf", ["²2998224725", "٥2998224725"])
+    def test_rejeita_digito_nao_ascii_sem_lancar_excecao(cpf):
+        """Regressão do Achado 2 de revisao-dos-diffs.md.
+    
+        `str.isdigit()` é verdadeiro para caracteres que não pertencem a `0-9` (expoentes como
+        "²", dígitos indo-arábicos como "٥"). Um deles fazia `_calcular_digito` levantar
+        `ValueError` ao chamar `int()`; o outro era aceito como válido silenciosamente. A checagem
+        de conjunto atual (`c not in DIGITOS`) compara contra `"0123456789"` explicitamente, então
+        nenhum dos dois chega ao cálculo do dígito verificador.
+        """
+>       assert validar_cpf(cpf) is False
+
+tests\test_cpf.py:85: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\validacao\cpf.py:43: in validar_cpf
+    primeiro = _calcular_digito(digitos[:9])
+src\validacao\cpf.py:19: in _calcular_digito
+    soma = sum(int(digito) * (peso_inicial - posicao)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+.0 = <enumerate object at 0x000002AD83230CC0>
+
+>   soma = sum(int(digito) * (peso_inicial - posicao)
+               for posicao, digito in enumerate(digitos))
+E   ValueError: invalid literal for int() with base 10: '²'
+
+src\validacao\cpf.py:19: ValueError
+_____ test_rejeita_digito_nao_ascii_sem_lancar_excecao[\u06652998224725] ______
+
+cpf = '٥2998224725'
+
+    @pytest.mark.parametrize("cpf", ["²2998224725", "٥2998224725"])
+    def test_rejeita_digito_nao_ascii_sem_lancar_excecao(cpf):
+        """Regressão do Achado 2 de revisao-dos-diffs.md.
+    
+        `str.isdigit()` é verdadeiro para caracteres que não pertencem a `0-9` (expoentes como
+        "²", dígitos indo-arábicos como "٥"). Um deles fazia `_calcular_digito` levantar
+        `ValueError` ao chamar `int()`; o outro era aceito como válido silenciosamente. A checagem
+        de conjunto atual (`c not in DIGITOS`) compara contra `"0123456789"` explicitamente, então
+        nenhum dos dois chega ao cálculo do dígito verificador.
+        """
+>       assert validar_cpf(cpf) is False
+E       AssertionError: assert True is False
+E        +  where True = validar_cpf('٥2998224725')
+
+tests\test_cpf.py:85: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/test_cpf.py::test_rejeita_cpf_valido_cercado_de_lixo[<script>52998224725</script>]
+FAILED tests/test_cpf.py::test_rejeita_cpf_valido_cercado_de_lixo[529.982.247-25!!!]
+FAILED tests/test_cpf.py::test_rejeita_cpf_valido_cercado_de_lixo[CPF: 529.982.247-25]
+FAILED tests/test_cpf.py::test_rejeita_digito_nao_ascii_sem_lancar_excecao[\xb22998224725]
+FAILED tests/test_cpf.py::test_rejeita_digito_nao_ascii_sem_lancar_excecao[\u06652998224725]
+======================== 5 failed, 38 passed in 0.30s =========================
+[codigo de saida: 1]
+
+$ git add tests/test_cpf.py
+
+[codigo de saida: 0]
+
+$ git diff --cached --quiet
+
+[codigo de saida: 1]
+
+$ git commit -m Adiciona testes de regressao para normalizacao de CPF, ainda falhando (RED) - fix-normalizacao-cpf
+[feature/harness-arquitetura-3a-atividade ccac2b5] Adiciona testes de regressao para normalizacao de CPF, ainda falhando (RED) - fix-normalizacao-cpf
+ 1 file changed, 29 insertions(+)
+[codigo de saida: 0]
+
+[escrito] src/validacao/cpf.py (2165 bytes)
+[escrito] tests/test_cpf.py (3697 bytes)
+--- Rodando pytest depois da correcao (GREEN esperado) ---
+$ python -m pytest tests/test_cpf.py -v
+============================= test session starts =============================
+platform win32 -- Python 3.9.12, pytest-7.1.1, pluggy-1.6.0 -- C:\Users\lucas\anaconda3\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\lucas\Saida one drive\Documentos\Mestrado\TÓPICOS AVANÇADOS EM ENGENHARIA DE SOFTWARE 2\ia-dev-lab
+plugins: anyio-3.5.0, cov-7.1.0
+collecting ... collected 43 items
+
+tests/test_cpf.py::test_aceita_cpf_valido_sem_mascara[52998224725] PASSED [  2%]
+tests/test_cpf.py::test_aceita_cpf_valido_sem_mascara[11144477735] PASSED [  4%]
+tests/test_cpf.py::test_aceita_cpf_valido_sem_mascara[39053344705] PASSED [  6%]
+tests/test_cpf.py::test_aceita_cpf_valido_com_mascara[529.982.247-25] PASSED [  9%]
+tests/test_cpf.py::test_aceita_cpf_valido_com_mascara[111.444.777-35] PASSED [ 11%]
+tests/test_cpf.py::test_aceita_cpf_valido_com_mascara[390.533.447-05] PASSED [ 13%]
+tests/test_cpf.py::test_mascara_nao_altera_o_resultado PASSED            [ 16%]
+tests/test_cpf.py::test_rejeita_digito_verificador_errado[52998224724] PASSED [ 18%]
+tests/test_cpf.py::test_rejeita_digito_verificador_errado[52998224715] PASSED [ 20%]
+tests/test_cpf.py::test_rejeita_digito_verificador_errado[11144477731] PASSED [ 23%]
+tests/test_cpf.py::test_rejeita_sequencia_de_digitos_repetidos[00000000000] PASSED [ 25%]
+tests/test_cpf.py::test_rejeita_sequencia_de_digitos_repetidos[11111111111] PASSED [ 27%]
+tests/test_cpf.py::test_rejeita_sequencia_de_digitos_repetidos[22222222222] PASSED [ 30%]
+tests/test_cpf.py::test_rejeita_sequencia_de_digitos_repetidos[33333333333] PASSED [ 32%]
+tests/test_cpf.py::test_rejeita_sequencia_de_digitos_repetidos[44444444444] PASSED [ 34%]
+tests/test_cpf.py::test_rejeita_sequencia_de_digitos_repetidos[55555555555] PASSED [ 37%]
+tests/test_cpf.py::test_rejeita_sequencia_de_digitos_repetidos[66666666666] PASSED [ 39%]
+tests/test_cpf.py::test_rejeita_sequencia_de_digitos_repetidos[77777777777] PASSED [ 41%]
+tests/test_cpf.py::test_rejeita_sequencia_de_digitos_repetidos[88888888888] PASSED [ 44%]
+tests/test_cpf.py::test_rejeita_sequencia_de_digitos_repetidos[99999999999] PASSED [ 46%]
+tests/test_cpf.py::test_rejeita_sequencia_repetida_com_mascara PASSED    [ 48%]
+tests/test_cpf.py::test_rejeita_entrada_com_tamanho_invalido[] PASSED    [ 51%]
+tests/test_cpf.py::test_rejeita_entrada_com_tamanho_invalido[   ] PASSED [ 53%]
+tests/test_cpf.py::test_rejeita_entrada_com_tamanho_invalido[5299822472] PASSED [ 55%]
+tests/test_cpf.py::test_rejeita_entrada_com_tamanho_invalido[529982247251] PASSED [ 58%]
+tests/test_cpf.py::test_rejeita_entrada_com_tamanho_invalido[...] PASSED [ 60%]
+tests/test_cpf.py::test_rejeita_entrada_que_nao_e_string[None] PASSED    [ 62%]
+tests/test_cpf.py::test_rejeita_entrada_que_nao_e_string[52998224725] PASSED [ 65%]
+tests/test_cpf.py::test_rejeita_entrada_que_nao_e_string[3.14] PASSED    [ 67%]
+tests/test_cpf.py::test_rejeita_entrada_que_nao_e_string[valor3] PASSED  [ 69%]
+tests/test_cpf.py::test_rejeita_entrada_que_nao_e_string[valor4] PASSED  [ 72%]
+tests/test_cpf.py::test_rejeita_entrada_que_nao_e_string[True] PASSED    [ 74%]
+tests/test_cpf.py::test_rejeita_entrada_com_caracteres_nao_numericos[abcdefghijk] PASSED [ 76%]
+tests/test_cpf.py::test_rejeita_entrada_com_caracteres_nao_numericos[529.982.247-2a] PASSED [ 79%]
+tests/test_cpf.py::test_rejeita_entrada_com_caracteres_nao_numericos[CPF invalido] PASSED [ 81%]
+tests/test_cpf.py::test_rejeita_cpf_valido_cercado_de_lixo[<script>52998224725</script>] PASSED [ 83%]
+tests/test_cpf.py::test_rejeita_cpf_valido_cercado_de_lixo[529.982.247-25!!!] PASSED [ 86%]
+tests/test_cpf.py::test_rejeita_cpf_valido_cercado_de_lixo[CPF: 529.982.247-25] PASSED [ 88%]
+tests/test_cpf.py::test_rejeita_digito_nao_ascii_sem_lancar_excecao[\xb22998224725] PASSED [ 90%]
+tests/test_cpf.py::test_rejeita_digito_nao_ascii_sem_lancar_excecao[\u06652998224725] PASSED [ 93%]
+tests/test_cpf.py::test_normalizar_remove_apenas_formatacao PASSED       [ 95%]
+tests/test_cpf.py::test_calcular_digito_reproduz_os_verificadores_conhecidos PASSED [ 97%]
+tests/test_cpf.py::test_calcular_digito_retorna_zero_quando_o_resto_e_menor_que_dois PASSED [100%]
+
+============================= 43 passed in 0.12s ==============================
+[codigo de saida: 0]
+
+$ git add src/validacao/cpf.py tests/test_cpf.py openspec/changes/fix-normalizacao-cpf/proposal.md openspec/changes/fix-normalizacao-cpf/tasks.md openspec/changes/add-validacao-cnpj/checkpoint-humano.md
+
+[codigo de saida: 0]
+
+$ git diff --cached --quiet
+
+[codigo de saida: 1]
+
+$ git commit -m Corrige normalizacao de CPF (GREEN + REFACTOR) - fix-normalizacao-cpf
+[feature/harness-arquitetura-3a-atividade b02e871] Corrige normalizacao de CPF (GREEN + REFACTOR) - fix-normalizacao-cpf
+ 5 files changed, 111 insertions(+), 17 deletions(-)
+ create mode 100644 openspec/changes/fix-normalizacao-cpf/proposal.md
+ create mode 100644 openspec/changes/fix-normalizacao-cpf/tasks.md
+[codigo de saida: 0]
+
+[escrito] tests/test_cpf.py (3852 bytes)
+$ python -m pytest tests/test_cpf.py -q
+............................................                             [100%]
+44 passed in 0.13s
+[codigo de saida: 0]
+
+$ git add tests/test_cpf.py docs/etapa1-autonomia.md
+
+[codigo de saida: 0]
+
+$ git diff --cached --quiet
+
+[codigo de saida: 1]
+
+$ git commit -m Adiciona teste de espacos ao redor do CPF e registra comparacao de autonomia (Etapa 1)
+[feature/harness-arquitetura-3a-atividade b1a90da] Adiciona teste de espacos ao redor do CPF e registra comparacao de autonomia (Etapa 1)
+ 2 files changed, 83 insertions(+)
+ create mode 100644 docs/etapa1-autonomia.md
+[codigo de saida: 0]
+
+[escrito] src/validacao/cpf.py (2843 bytes)
+[escrito] tests/test_cpf.py (4379 bytes)
+$ python -m pytest tests/test_cpf.py -q
+..................................................                       [100%]
+50 passed in 0.09s
+[codigo de saida: 0]
+
+$ git add src/validacao/cpf.py tests/test_cpf.py
+
+[codigo de saida: 0]
+
+$ git diff --cached --quiet
+
+[codigo de saida: 1]
+
+$ git commit -m Adiciona mascarar_cpf com validacao de entrada, apos comparacao com tarefa sem TDD (Etapa 2)
+[feature/harness-arquitetura-3a-atividade 47e5303] Adiciona mascarar_cpf com validacao de entrada, apos comparacao com tarefa sem TDD (Etapa 2)
+ 2 files changed, 30 insertions(+), 4 deletions(-)
+[codigo de saida: 0]
+
+[escrito] src/validacao/cpf.py (3325 bytes)
+[escrito] src/validacao/cnpj.py (3486 bytes)
+[escrito] tests/test_equivalencia_modulo11.py (1338 bytes)
+$ python -m pytest -q
+........................................................................ [ 55%]
+..........................................................               [100%]
+130 passed in 0.37s
+[codigo de saida: 0]
+
+$ git add src/validacao/cpf.py src/validacao/cnpj.py tests/test_equivalencia_modulo11.py docs/etapa6-divida-tecnica.md docs/adr/0002-nao-extrair-servico-mas-endereca-duplicacao.md
+
+[codigo de saida: 0]
+
+$ git diff --cached --quiet
+
+[codigo de saida: 1]
+
+$ git commit -m Extrai _ajustar_resto_modulo11 com teste de equivalencia, endereca duplicacao (Etapa 6, ADR 0002)
+[feature/harness-arquitetura-3a-atividade 504ccdf] Extrai _ajustar_resto_modulo11 com teste de equivalencia, endereca duplicacao (Etapa 6, ADR 0002)
+ 5 files changed, 232 insertions(+), 2 deletions(-)
+ create mode 100644 docs/adr/0002-nao-extrair-servico-mas-endereca-duplicacao.md
+ create mode 100644 docs/etapa6-divida-tecnica.md
+ create mode 100644 tests/test_equivalencia_modulo11.py
+[codigo de saida: 0]
+
+$ git add docs/etapa2-tdd.md docs/etapa3-checkpoint.md
+
+[codigo de saida: 0]
+
+$ git diff --cached --quiet
+
+[codigo de saida: 1]
+
+$ git commit -m Documenta investigacao de TDD/Superpowers e checkpoint humano disparado (Etapas 2 e 3)
+[feature/harness-arquitetura-3a-atividade 21c3467] Documenta investigacao de TDD/Superpowers e checkpoint humano disparado (Etapas 2 e 3)
+ 2 files changed, 219 insertions(+)
+ create mode 100644 docs/etapa2-tdd.md
+ create mode 100644 docs/etapa3-checkpoint.md
+[codigo de saida: 0]
+
+$ git add docs/etapa4-arquitetura.md docs/etapa5-diagrama.md docs/diagramas/c4-container-v1.mmd docs/diagramas/c4-container-v2.mmd
+
+[codigo de saida: 0]
+
+$ git diff --cached --quiet
+
+[codigo de saida: 1]
+
+$ git commit -m Registra resumo de arquitetura e diagrama C4 em duas versoes (Etapa 4)
+[feature/harness-arquitetura-3a-atividade 7d555fd] Registra resumo de arquitetura e diagrama C4 em duas versoes (Etapa 4)
+ 4 files changed, 197 insertions(+)
+ create mode 100644 docs/diagramas/c4-container-v1.mmd
+ create mode 100644 docs/diagramas/c4-container-v2.mmd
+ create mode 100644 docs/etapa4-arquitetura.md
+ create mode 100644 docs/etapa5-diagrama.md
+[codigo de saida: 0]
+
+$ git add docs/sessao-log.md docs/relatorio-harness-arquitetura.md
+
+[codigo de saida: 0]
+
+$ git diff --cached --quiet
+
+[codigo de saida: 1]
+
+$ git commit -m Adiciona log da sessao e relatorio final da atividade de Harness e Arquitetura (Etapas 3 e 8)
+[feature/harness-arquitetura-3a-atividade 7f853d6] Adiciona log da sessao e relatorio final da atividade de Harness e Arquitetura (Etapas 3 e 8)
+ 2 files changed, 122 insertions(+)
+ create mode 100644 docs/relatorio-harness-arquitetura.md
+ create mode 100644 docs/sessao-log.md
+[codigo de saida: 0]
+
+$ git add README.md CLAUDE.md src/validacao/CLAUDE.md
+
+[codigo de saida: 0]
+
+$ git diff --cached --quiet
+
+[codigo de saida: 1]
+
+$ git commit -m Atualiza README e CLAUDE.md com as novidades da 3a atividade
+[feature/harness-arquitetura-3a-atividade 548c5f2] Atualiza README e CLAUDE.md com as novidades da 3a atividade
+ 3 files changed, 148 insertions(+), 40 deletions(-)
+[codigo de saida: 0]
+
+--- Suite completa apos todas as etapas ---
+$ python -m pytest -v
+============================= test session starts =============================
+platform win32 -- Python 3.9.12, pytest-7.1.1, pluggy-1.6.0 -- C:\Users\lucas\anaconda3\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\lucas\Saida one drive\Documentos\Mestrado\TÓPICOS AVANÇADOS EM ENGENHARIA DE SOFTWARE 2\ia-dev-lab
+plugins: anyio-3.5.0, cov-7.1.0
+collecting ... collected 130 items
+
+tests/test_cnpj.py::test_aceita_cnpj_numerico_valido[11222333000181] PASSED [  0%]
+tests/test_cnpj.py::test_aceita_cnpj_numerico_valido[11444777000161] PASSED [  1%]
+tests/test_cnpj.py::test_aceita_cnpj_numerico_valido[34028316000103] PASSED [  2%]
+tests/test_cnpj.py::test_aceita_cnpj_numerico_valido[00000000000191] PASSED [  3%]
+tests/test_cnpj.py::test_rejeita_digito_verificador_incorreto[11222333000182] PASSED [  3%]
+tests/test_cnpj.py::test_rejeita_digito_verificador_incorreto[11444777000162] PASSED [  4%]
+tests/test_cnpj.py::test_rejeita_digito_verificador_incorreto[34028316000104] PASSED [  5%]
+tests/test_cnpj.py::test_aceita_cnpj_alfanumerico_valido[12ABC34501DE35] PASSED [  6%]
+tests/test_cnpj.py::test_aceita_cnpj_alfanumerico_valido[ABCDEFGH000195] PASSED [  6%]
+tests/test_cnpj.py::test_aceita_cnpj_alfanumerico_valido[A1B2C3D4000193] PASSED [  7%]
+tests/test_cnpj.py::test_aceita_cnpj_alfanumerico_valido[1A2B3C4D000179] PASSED [  8%]
+tests/test_cnpj.py::test_aceita_cnpj_alfanumerico_com_mascara PASSED     [  9%]
+tests/test_cnpj.py::test_rejeita_letra_em_posicao_de_digito_verificador[12ABC34501DE3X] PASSED [ 10%]
+tests/test_cnpj.py::test_rejeita_letra_em_posicao_de_digito_verificador[12ABC34501DEA5] PASSED [ 10%]
+tests/test_cnpj.py::test_rejeita_letra_em_posicao_de_digito_verificador[12ABC34501DEXX] PASSED [ 11%]
+tests/test_cnpj.py::test_mascara_e_espacos_nao_alteram_o_resultado[11.222.333/0001-81] PASSED [ 12%]
+tests/test_cnpj.py::test_mascara_e_espacos_nao_alteram_o_resultado[ 11 222 333 0001 81 ] PASSED [ 13%]
+tests/test_cnpj.py::test_mascara_e_espacos_nao_alteram_o_resultado[11222333/000181] PASSED [ 13%]
+tests/test_cnpj.py::test_mascara_e_espacos_nao_alteram_o_resultado[11-222-333-0001-81] PASSED [ 14%]
+tests/test_cnpj.py::test_aceita_letras_minusculas[12abc34501de35] PASSED [ 15%]
+tests/test_cnpj.py::test_aceita_letras_minusculas[12AbC34501dE35] PASSED [ 16%]
+tests/test_cnpj.py::test_aceita_letras_minusculas[ab.cde.fgh/0001-95] PASSED [ 16%]
+tests/test_cnpj.py::test_rejeita_sequencia_de_caracteres_identicos[11111111111180] PASSED [ 17%]
+tests/test_cnpj.py::test_rejeita_sequencia_de_caracteres_identicos[00000000000000] PASSED [ 18%]
+tests/test_cnpj.py::test_rejeita_sequencia_de_caracteres_identicos[AAAAAAAAAAAA45] PASSED [ 19%]
+tests/test_cnpj.py::test_aceita_cnpj_legitimo_com_muitos_zeros PASSED    [ 20%]
+tests/test_cnpj.py::test_rejeita_entrada_que_nao_e_texto[None] PASSED    [ 20%]
+tests/test_cnpj.py::test_rejeita_entrada_que_nao_e_texto[112223330001810] PASSED [ 21%]
+tests/test_cnpj.py::test_rejeita_entrada_que_nao_e_texto[3.14] PASSED    [ 22%]
+tests/test_cnpj.py::test_rejeita_entrada_que_nao_e_texto[valor3] PASSED  [ 23%]
+tests/test_cnpj.py::test_rejeita_entrada_que_nao_e_texto[valor4] PASSED  [ 23%]
+tests/test_cnpj.py::test_rejeita_entrada_que_nao_e_texto[True] PASSED    [ 24%]
+tests/test_cnpj.py::test_rejeita_entrada_que_nao_e_texto[112223330001811] PASSED [ 25%]
+tests/test_cnpj.py::test_rejeita_tamanho_incorreto[] PASSED              [ 26%]
+tests/test_cnpj.py::test_rejeita_tamanho_incorreto[   ] PASSED           [ 26%]
+tests/test_cnpj.py::test_rejeita_tamanho_incorreto[1122233300018] PASSED [ 27%]
+tests/test_cnpj.py::test_rejeita_tamanho_incorreto[112223330001812] PASSED [ 28%]
+tests/test_cnpj.py::test_rejeita_tamanho_incorreto[..//--] PASSED        [ 29%]
+tests/test_cnpj.py::test_rejeita_caractere_fora_do_conjunto_permitido[12AB\xc734501DE35] PASSED [ 30%]
+tests/test_cnpj.py::test_rejeita_caractere_fora_do_conjunto_permitido[12AB@34501DE35] PASSED [ 30%]
+tests/test_cnpj.py::test_rejeita_caractere_fora_do_conjunto_permitido[11222333000181abc] PASSED [ 31%]
+tests/test_cnpj.py::test_rejeita_caractere_fora_do_conjunto_permitido[CNPJ: 11.222.333/0001-81] PASSED [ 32%]
+tests/test_cnpj.py::test_rejeita_caractere_fora_do_conjunto_permitido[<script>11222333000181</script>] PASSED [ 33%]
+tests/test_cnpj.py::test_rejeita_digitos_unicode_nao_ascii[\xb21222333000181] PASSED [ 33%]
+tests/test_cnpj.py::test_rejeita_digitos_unicode_nao_ascii[1122233300018\xb2] PASSED [ 34%]
+tests/test_cnpj.py::test_rejeita_digitos_unicode_nao_ascii[\u0661\u0661\u0662\u0662\u0662\u0663\u0663\u0663\u0660\u0660\u0660\u0661\u0668\u0661] PASSED [ 35%]
+tests/test_cnpj.py::test_normalizar_remove_apenas_formatacao_e_aplica_caixa_alta PASSED [ 36%]
+tests/test_cnpj.py::test_valor_caractere_segue_a_regra_ascii_menos_48 PASSED [ 36%]
+tests/test_cnpj.py::test_pesos_estao_conforme_a_documentacao_da_receita PASSED [ 37%]
+tests/test_cnpj.py::test_calcular_digito_reproduz_verificadores_conhecidos PASSED [ 38%]
+tests/test_cpf.py::test_aceita_cpf_valido_sem_mascara[52998224725] PASSED [ 39%]
+tests/test_cpf.py::test_aceita_cpf_valido_sem_mascara[11144477735] PASSED [ 40%]
+tests/test_cpf.py::test_aceita_cpf_valido_sem_mascara[39053344705] PASSED [ 40%]
+tests/test_cpf.py::test_aceita_cpf_valido_com_mascara[529.982.247-25] PASSED [ 41%]
+tests/test_cpf.py::test_aceita_cpf_valido_com_mascara[111.444.777-35] PASSED [ 42%]
+tests/test_cpf.py::test_aceita_cpf_valido_com_mascara[390.533.447-05] PASSED [ 43%]
+tests/test_cpf.py::test_mascara_nao_altera_o_resultado PASSED            [ 43%]
+tests/test_cpf.py::test_aceita_cpf_valido_com_espacos_ao_redor PASSED    [ 44%]
+tests/test_cpf.py::test_rejeita_digito_verificador_errado[52998224724] PASSED [ 45%]
+tests/test_cpf.py::test_rejeita_digito_verificador_errado[52998224715] PASSED [ 46%]
+tests/test_cpf.py::test_rejeita_digito_verificador_errado[11144477731] PASSED [ 46%]
+tests/test_cpf.py::test_rejeita_sequencia_de_digitos_repetidos[00000000000] PASSED [ 47%]
+tests/test_cpf.py::test_rejeita_sequencia_de_digitos_repetidos[11111111111] PASSED [ 48%]
+tests/test_cpf.py::test_rejeita_sequencia_de_digitos_repetidos[22222222222] PASSED [ 49%]
+tests/test_cpf.py::test_rejeita_sequencia_de_digitos_repetidos[33333333333] PASSED [ 50%]
+tests/test_cpf.py::test_rejeita_sequencia_de_digitos_repetidos[44444444444] PASSED [ 50%]
+tests/test_cpf.py::test_rejeita_sequencia_de_digitos_repetidos[55555555555] PASSED [ 51%]
+tests/test_cpf.py::test_rejeita_sequencia_de_digitos_repetidos[66666666666] PASSED [ 52%]
+tests/test_cpf.py::test_rejeita_sequencia_de_digitos_repetidos[77777777777] PASSED [ 53%]
+tests/test_cpf.py::test_rejeita_sequencia_de_digitos_repetidos[88888888888] PASSED [ 53%]
+tests/test_cpf.py::test_rejeita_sequencia_de_digitos_repetidos[99999999999] PASSED [ 54%]
+tests/test_cpf.py::test_rejeita_sequencia_repetida_com_mascara PASSED    [ 55%]
+tests/test_cpf.py::test_rejeita_entrada_com_tamanho_invalido[] PASSED    [ 56%]
+tests/test_cpf.py::test_rejeita_entrada_com_tamanho_invalido[   ] PASSED [ 56%]
+tests/test_cpf.py::test_rejeita_entrada_com_tamanho_invalido[5299822472] PASSED [ 57%]
+tests/test_cpf.py::test_rejeita_entrada_com_tamanho_invalido[529982247251] PASSED [ 58%]
+tests/test_cpf.py::test_rejeita_entrada_com_tamanho_invalido[...] PASSED [ 59%]
+tests/test_cpf.py::test_rejeita_entrada_que_nao_e_string[None] PASSED    [ 60%]
+tests/test_cpf.py::test_rejeita_entrada_que_nao_e_string[52998224725] PASSED [ 60%]
+tests/test_cpf.py::test_rejeita_entrada_que_nao_e_string[3.14] PASSED    [ 61%]
+tests/test_cpf.py::test_rejeita_entrada_que_nao_e_string[valor3] PASSED  [ 62%]
+tests/test_cpf.py::test_rejeita_entrada_que_nao_e_string[valor4] PASSED  [ 63%]
+tests/test_cpf.py::test_rejeita_entrada_que_nao_e_string[True] PASSED    [ 63%]
+tests/test_cpf.py::test_rejeita_entrada_com_caracteres_nao_numericos[abcdefghijk] PASSED [ 64%]
+tests/test_cpf.py::test_rejeita_entrada_com_caracteres_nao_numericos[529.982.247-2a] PASSED [ 65%]
+tests/test_cpf.py::test_rejeita_entrada_com_caracteres_nao_numericos[CPF invalido] PASSED [ 66%]
+tests/test_cpf.py::test_rejeita_cpf_valido_cercado_de_lixo[<script>52998224725</script>] PASSED [ 66%]
+tests/test_cpf.py::test_rejeita_cpf_valido_cercado_de_lixo[529.982.247-25!!!] PASSED [ 67%]
+tests/test_cpf.py::test_rejeita_cpf_valido_cercado_de_lixo[CPF: 529.982.247-25] PASSED [ 68%]
+tests/test_cpf.py::test_rejeita_digito_nao_ascii_sem_lancar_excecao[\xb22998224725] PASSED [ 69%]
+tests/test_cpf.py::test_rejeita_digito_nao_ascii_sem_lancar_excecao[\u06652998224725] PASSED [ 70%]
+tests/test_cpf.py::test_normalizar_remove_apenas_formatacao PASSED       [ 70%]
+tests/test_cpf.py::test_calcular_digito_reproduz_os_verificadores_conhecidos PASSED [ 71%]
+tests/test_cpf.py::test_calcular_digito_retorna_zero_quando_o_resto_e_menor_que_dois PASSED [ 72%]
+tests/test_cpf.py::test_mascarar_cpf_valido PASSED                       [ 73%]
+tests/test_cpf.py::test_mascarar_cpf_invalido_devolve_none[None] PASSED  [ 73%]
+tests/test_cpf.py::test_mascarar_cpf_invalido_devolve_none[] PASSED      [ 74%]
+tests/test_cpf.py::test_mascarar_cpf_invalido_devolve_none[11111111111] PASSED [ 75%]
+tests/test_cpf.py::test_mascarar_cpf_invalido_devolve_none[5299822472] PASSED [ 76%]
+tests/test_cpf.py::test_mascarar_cpf_invalido_devolve_none[cpf invalido] PASSED [ 76%]
+tests/test_equivalencia_modulo11.py::test_as_duas_copias_concordam_para_todo_resto_possivel PASSED [ 77%]
+tests/test_equivalencia_modulo11.py::test_regra_e_zero_abaixo_de_dois_e_complemento_dali_em_diante PASSED [ 78%]
+tests/test_lote.py::test_ca1_valida_tipos_misturados_inferindo_pelo_conteudo PASSED [ 79%]
+tests/test_lote.py::test_infere_o_tipo_pelo_comprimento_util[529.982.247-25-True] PASSED [ 80%]
+tests/test_lote.py::test_infere_o_tipo_pelo_comprimento_util[52998224725-True] PASSED [ 80%]
+tests/test_lote.py::test_infere_o_tipo_pelo_comprimento_util[11.222.333/0001-81-True] PASSED [ 81%]
+tests/test_lote.py::test_infere_o_tipo_pelo_comprimento_util[12ABC34501DE35-True] PASSED [ 82%]
+tests/test_lote.py::test_infere_o_tipo_pelo_comprimento_util[52998224724-False] PASSED [ 83%]
+tests/test_lote.py::test_infere_o_tipo_pelo_comprimento_util[11222333000182-False] PASSED [ 83%]
+tests/test_lote.py::test_infere_o_tipo_pelo_comprimento_util[123-False] PASSED [ 84%]
+tests/test_lote.py::test_infere_o_tipo_pelo_comprimento_util[-False] PASSED [ 85%]
+tests/test_lote.py::test_ca2_acumula_falhas_sem_interromper PASSED       [ 86%]
+tests/test_lote.py::test_ca2b_linha_em_branco_nao_e_um_registro PASSED   [ 86%]
+tests/test_lote.py::test_registra_motivo_de_tamanho_inesperado PASSED    [ 87%]
+tests/test_lote.py::test_ca3_le_arquivo_do_excel_com_bom_e_ponto_e_virgula PASSED [ 88%]
+tests/test_lote.py::test_bom_nao_contamina_o_nome_da_primeira_coluna PASSED [ 89%]
+tests/test_lote.py::test_detecta_o_separador_pelo_cabecalho[nome,documento-,] PASSED [ 90%]
+tests/test_lote.py::test_detecta_o_separador_pelo_cabecalho[nome;documento-;] PASSED [ 90%]
+tests/test_lote.py::test_detecta_o_separador_pelo_cabecalho[documento-,] PASSED [ 91%]
+tests/test_lote.py::test_detecta_o_separador_pelo_cabecalho[a;b;c,d-;] PASSED [ 92%]
+tests/test_lote.py::test_ca4_coluna_inexistente_levanta_erro_com_as_colunas_disponiveis PASSED [ 93%]
+tests/test_lote.py::test_ca5_arquivo_apenas_com_cabecalho PASSED         [ 93%]
+tests/test_lote.py::test_codigo_de_saida_zero_quando_tudo_valido PASSED  [ 94%]
+tests/test_lote.py::test_codigo_de_saida_um_quando_ha_documento_invalido PASSED [ 95%]
+tests/test_lote.py::test_codigo_de_saida_dois_quando_arquivo_nao_existe PASSED [ 96%]
+tests/test_lote.py::test_codigo_de_saida_dois_quando_coluna_nao_existe PASSED [ 96%]
+tests/test_lote.py::test_codigo_de_saida_dois_sem_argumentos PASSED      [ 97%]
+tests/test_lote.py::test_arquivo_vazio_nao_e_falha_de_validacao PASSED   [ 98%]
+tests/test_lote.py::test_aceita_coluna_com_nome_diferente PASSED         [ 99%]
+tests/test_lote.py::test_validar_linhas_opera_sobre_texto PASSED         [100%]
+
+============================= 130 passed in 0.36s =============================
+[codigo de saida: 0]
+
+--- Testando o hook de pre-commit de verdade, em branch descartavel ---
+$ git checkout -b _teste_hook_descartavel
+Switched to a new branch '_teste_hook_descartavel'
+[codigo de saida: 0]
+
+[escrito] tests/_zz_scratch_teste_hook.py (40 bytes)
+$ git add tests/_zz_scratch_teste_hook.py
+
+[codigo de saida: 0]
+
+$ git commit -m scratch: baseline para teste do hook (branch descartavel)
+[_teste_hook_descartavel 59b02bb] scratch: baseline para teste do hook (branch descartavel)
+ 1 file changed, 2 insertions(+)
+ create mode 100644 tests/_zz_scratch_teste_hook.py
+[codigo de saida: 0]
+
+$ git rm tests/_zz_scratch_teste_hook.py
+rm 'tests/_zz_scratch_teste_hook.py'
+[codigo de saida: 0]
+
+Tentando commitar a EXCLUSAO do arquivo de teste (deve ser bloqueado pelo hook):
+$ git commit -m tentativa de exclusao de teste (deve ser bloqueada)
+BLOQUEADO pelo hook pre-commit: exclusao de arquivo(s) de teste no commit:
+  - tests/_zz_scratch_teste_hook.py
+
+Se isto e intencional (ex.: teste obsoleto apos remocao de funcionalidade),
+refaca o commit com: PERMITIR_EDICAO_DESTRUTIVA_TESTS=1 git commit ...
+[codigo de saida: 1]
+
+[OK] O hook bloqueou a exclusao do arquivo de teste, como esperado.
+$ git checkout feature/harness-arquitetura-3a-atividade
+Switched to branch 'feature/harness-arquitetura-3a-atividade'
+[codigo de saida: 0]
+
+$ git branch -D _teste_hook_descartavel
+Deleted branch _teste_hook_descartavel (was 59b02bb).
+[codigo de saida: 0]
+
+$ git add docs/evidencia-execucao-real.log
